@@ -162,3 +162,23 @@ class PopulationResult(BaseModel):
     fetched_at: str
     note: str | None
     source: str = "OpenStreetMap Overpass API"
+    
+    
+class ProtectedAreaFeature(BaseModel):
+    feature_id: str
+    name: str
+    kind: str             # e.g., "state_park", "nature_preserve"
+    lat: float
+    lon: float
+    tags: dict[str, str]
+
+class ProtectedAreaResult(BaseModel):
+    lat: float
+    lon: float
+    status: str           # "restricted", "caution", or "clear"
+    risk_level: str       # "high", "moderate", or "none"
+    features: list[ProtectedAreaFeature]
+    features_found: int
+    fetched_at: str
+    note: str | None
+    source: str = "USGS PAD-US ArcGIS Feature Service"
