@@ -3,7 +3,7 @@ app/main.py — FastAPI application for the Skye drone education agent.
 
 Endpoints:
     GET /health
-    GET /check?lat=&lon=&session_id=&flight_time=
+    GET /check?lat=&lon=&session_id=&flight_time=&planned_altitude_ft=&radius_m=
     GET /rules?query=&session_id=
 """
 from __future__ import annotations
@@ -12,34 +12,46 @@ import datetime as dt
 from contextlib import asynccontextmanager
 from typing import Optional
 
+import httpx
 from fastapi import FastAPI, HTTPException, Query
-from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 
 from app import composer
-from app.providers import faa_facility_map
+from app.providers import faa_class_airspace, faa_facility_map, weather as weather_provider
 from app.rules.chroma_dummy import get_store
 from app.schema import CheckResponse, RulesResponse
 
 
 # ---------------------------------------------------------------------------
-# Lifespan startup
+# Lifespan startup / shutdown
 # ---------------------------------------------------------------------------
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Load facility map into memory
+    # Shared async HTTP client for all live providers
+    http_client = httpx.AsyncClient()
+    faa_facility_map.set_http_client(http_client)
+    weather_provider.set_http_client(http_client)
+
+    # Load offline GeoJSON fallback into memory (used when USE_LIVE_FAA=false)
     try:
         faa_facility_map.load()
     except Exception as exc:
         print(f"[startup] Warning: could not load facility map: {exc}")
+    try:
+        faa_class_airspace.load()
+    except Exception as exc:
+        print(f"[startup] Warning: could not load class airspace: {exc}")
 
-    # Ensure Chroma is seeded
+    # Ensure Chroma rules corpus is seeded
     try:
         get_store().ensure_seeded()
     except Exception as exc:
         print(f"[startup] Warning: could not seed Chroma: {exc}")
 
     yield
+
+    await http_client.aclose()
 
 
 app = FastAPI(
@@ -51,6 +63,14 @@ app = FastAPI(
     ),
     version="0.1.0",
     lifespan=lifespan,
+)
+
+# Allow the Vite dev server (any localhost port) and production origin to call the API
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173", "http://localhost:3000", "http://localhost:4173"],
+    allow_methods=["GET"],
+    allow_headers=["*"],
 )
 
 
@@ -87,13 +107,19 @@ def health():
         "Does NOT return a verdict — reports what sources say and reminds you to verify in B4UFLY."
     ),
 )
-def check(
+async def check(
     lat: float = Query(..., ge=-90, le=90, description="Latitude in decimal degrees"),
     lon: float = Query(..., ge=-180, le=180, description="Longitude in decimal degrees"),
     session_id: Optional[str] = Query(None, description="Optional session ID for repetition control"),
     flight_time: Optional[str] = Query(
         None,
         description="ISO 8601 planned flight time, e.g. 2025-06-01T14:00:00Z",
+    ),
+    planned_altitude_ft: Optional[int] = Query(
+        None, ge=1, description="Planned altitude in feet AGL (from the flight plan form)"
+    ),
+    radius_m: Optional[float] = Query(
+        None, ge=1, le=5000, description="Flight area radius in metres (from the flight plan form)"
     ),
 ):
     ft: Optional[dt.datetime] = None
@@ -103,7 +129,14 @@ def check(
         except ValueError:
             raise HTTPException(status_code=422, detail=f"Invalid flight_time format: {flight_time!r}")
 
-    return composer.check_location(lat=lat, lon=lon, session_id=session_id, flight_time=ft)
+    return await composer.check_location(
+        lat=lat,
+        lon=lon,
+        session_id=session_id,
+        flight_time=ft,
+        planned_altitude_ft=planned_altitude_ft,
+        radius_m=radius_m,
+    )
 
 
 # ---------------------------------------------------------------------------

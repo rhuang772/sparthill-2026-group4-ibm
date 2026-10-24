@@ -3,25 +3,38 @@ import { Bot, Send, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import AppShell from '../components/AppShell';
 import ChatBubble from '../components/ChatBubble';
-import { getSkyeResponse } from '../data/mockSkye';
 import type { ChatMessage } from '../types';
 import styles from './ChatPage.module.css';
 
+const API_BASE = import.meta.env.VITE_API_BASE ?? 'http://localhost:8000';
+
+interface RulesResponse {
+  answer_markdown: string;
+  citations: Array<{ rule_id: string; citation: string; source_url: string; dummy: boolean }>;
+  mock_data: boolean;
+}
+
+/** Strip markdown syntax to plain text for the chat bubble. */
+function stripMarkdown(md: string): string {
+  return md
+    .replace(/^#{1,6}\s+/gm, '')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/^---+$/gm, '')
+    .replace(/^[-*]\s/gm, '• ')
+    .trim();
+}
+
 const GREETING: ChatMessage = {
   role: 'skye',
-  text: "Hi! I'm Skye, your SkyBrief flight coach. I can answer questions about FAA rules, California drone laws, airspace, registration, TFRs, and anything else related to safe recreational drone flight. What would you like to know?",
-  citation: {
-    source: 'FAA UAS Resource Hub',
-    url: 'https://www.faa.gov/uas',
-    layer: 'federal',
-  },
+  text: "Hi! I'm Skye, your drone flight coach. I can answer questions about FAA rules, airspace, registration, TFRs, LAANC, and anything else related to safe recreational drone flight. What would you like to know?",
 };
 
 const SUGGESTED_PROMPTS = [
   'What is a TFR?',
   'Do I need to register my drone?',
-  'Can I fly after sunset?',
   'What is LAANC?',
+  'Can I fly in controlled airspace?',
 ];
 
 export default function ChatPage() {
@@ -29,13 +42,14 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<ChatMessage[]>([GREETING]);
   const [inputValue, setInputValue] = useState('');
   const [isThinking, setIsThinking] = useState(false);
+  const [sessionId] = useState(() => `chat-${Date.now()}`);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isThinking]);
 
-  function sendMessage(text: string) {
+  async function sendMessage(text: string) {
     const trimmed = text.trim();
     if (!trimmed || isThinking) return;
 
@@ -44,16 +58,31 @@ export default function ChatPage() {
     setInputValue('');
     setIsThinking(true);
 
-    setTimeout(() => {
-      const skyeResp = getSkyeResponse(trimmed);
+    try {
+      const params = new URLSearchParams({ query: trimmed, session_id: sessionId });
+      const res = await fetch(`${API_BASE}/rules?${params}`);
+      if (!res.ok) {
+        const detail = await res.text().catch(() => `HTTP ${res.status}`);
+        throw new Error(`API error ${res.status}: ${detail}`);
+      }
+      const data: RulesResponse = await res.json();
+      const plain = stripMarkdown(data.answer_markdown);
       const skyeMsg: ChatMessage = {
         role: 'skye',
-        text: skyeResp.text,
-        citation: skyeResp.citation,
+        text: plain + (data.mock_data ? '\n\n⚠ Demo rules corpus was used.' : ''),
       };
       setMessages((prev) => [...prev, skyeMsg]);
+    } catch (err) {
+      const errMsg: ChatMessage = {
+        role: 'skye',
+        text:
+          `Could not reach the Skye API (${String(err)}). ` +
+          'Make sure the backend is running: make run',
+      };
+      setMessages((prev) => [...prev, errMsg]);
+    } finally {
       setIsThinking(false);
-    }, 400);
+    }
   }
 
   function handleSubmit(e: React.FormEvent) {

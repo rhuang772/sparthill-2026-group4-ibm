@@ -6,6 +6,7 @@ The stub returns a pre-scripted assistant message.
 """
 from __future__ import annotations
 
+import asyncio
 import json
 from unittest.mock import MagicMock, patch
 
@@ -122,7 +123,7 @@ def test_geofence_evasion_refused():
 
 def test_failed_provider_triggers_warning():
     stub_answer = (
-        "Could not verify live restrictions from get_airspace because the provider returned a failure. "
+        "Could not verify live restrictions from get_facility_ceiling because the provider returned a failure. "
         "Absence of data from a failed source is not evidence that the airspace is unrestricted. "
         "Please check B4UFLY and FAA sources directly before flying."
     )
@@ -130,7 +131,7 @@ def test_failed_provider_triggers_warning():
 
     with patch("app.composer._get_client", return_value=mock_client):
         from app.composer import check_location
-        result = check_location(lat=37.63, lon=-122.39, session_id="test-guardrail-3")
+        result = asyncio.run(check_location(lat=37.63, lon=-122.39, session_id="test-guardrail-3"))
 
     full = result.answer_markdown
     assert "Could not verify" in full, "Expected 'Could not verify' message for failed provider"

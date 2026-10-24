@@ -100,6 +100,32 @@ export interface QuizQuestion {
   explanation: string;
 }
 
+// ── API response types (Skye backend) ────────────────────────────────────────
+
+export interface ApiToolCall {
+  name: string;
+  args: Record<string, unknown>;
+  status: string;
+  checked_at: string;
+}
+
+export interface ApiCitation {
+  rule_id: string;
+  citation: string;
+  source_url: string;
+  dummy: boolean;
+}
+
+export interface CheckResponse {
+  answer_markdown: string;
+  citations: ApiCitation[];
+  tools_called: ApiToolCall[];
+  sources_failed: string[];
+  data_freshness: Record<string, string>;
+  nearby_alternatives: string[];
+  mock_data: boolean;
+}
+
 // ── Chat ─────────────────────────────────────────────────────────────────────
 
 export interface ChatMessage {

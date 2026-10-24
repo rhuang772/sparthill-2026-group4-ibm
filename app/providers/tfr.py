@@ -61,6 +61,10 @@ def get_tfrs(
     """
     now = dt.datetime.now(dt.timezone.utc)
 
+    # Normalize input flight_time to UTC if naive
+    if flight_time is not None and flight_time.tzinfo is None:
+        flight_time = flight_time.replace(tzinfo=dt.timezone.utc)
+
     try:
         raw, cache_age = _get_raw()
     except NotImplementedError as exc:
@@ -78,6 +82,13 @@ def get_tfrs(
                 try:
                     start = dt.datetime.fromisoformat(start_str.replace("Z", "+00:00"))
                     end = dt.datetime.fromisoformat(end_str.replace("Z", "+00:00"))
+                    
+                    # Ensure parsed dates are aware if strings lacked timezone offset
+                    if start.tzinfo is None:
+                        start = start.replace(tzinfo=dt.timezone.utc)
+                    if end.tzinfo is None:
+                        end = end.replace(tzinfo=dt.timezone.utc)
+
                     if not (start <= flight_time <= end):
                         continue
                 except ValueError:

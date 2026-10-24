@@ -1,6 +1,7 @@
 .chroma/
 data/uasfm/*.geojson
 data/uasfm/meta.json
+data/class_airspace/
 .env
 # Byte-compiled / optimized / DLL files
 __pycache__/
