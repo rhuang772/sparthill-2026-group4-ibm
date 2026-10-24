@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 import type { PilotProfile, FlightPlan } from '../types';
-import { clearPrivateData, readPreferences, savePreferences } from '../services/offlineStorage';
+import { clearPrivateData, savePreferences } from '../services/offlineStorage';
 
 interface AppContextValue {
   pilotProfile: PilotProfile | null;
@@ -13,8 +13,12 @@ interface AppContextValue {
 const AppContext = createContext<AppContextValue | undefined>(undefined);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-  const [pilotProfile, updatePilotProfile] = useState<PilotProfile | null>(() => readPreferences<PilotProfile>('profile'));
-  const [flightPlan, updateFlightPlan] = useState<FlightPlan | null>(() => readPreferences<FlightPlan>('flightPlan'));
+  // Each page load starts clean — profile/plan are still written to local
+  // storage below (so "Delete all locally saved data" has something real to
+  // clear), but we don't read them back in on mount, so a refresh doesn't
+  // repopulate the form with a previous session's answers.
+  const [pilotProfile, updatePilotProfile] = useState<PilotProfile | null>(null);
+  const [flightPlan, updateFlightPlan] = useState<FlightPlan | null>(null);
 
   function setPilotProfile(profile: PilotProfile) {
     savePreferences('profile', profile);
