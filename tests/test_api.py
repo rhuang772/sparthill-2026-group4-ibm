@@ -59,6 +59,22 @@ def test_health_endpoint(client):
     assert "mock_data" in data
 
 
+@pytest.mark.parametrize(
+    "origin",
+    ["http://localhost:5174", "http://127.0.0.1:5173"],
+)
+def test_cors_allows_local_frontend_origins(client, origin):
+    r = client.get("/health", headers={"Origin": origin})
+    assert r.status_code == 200
+    assert r.headers["access-control-allow-origin"] == origin
+
+
+def test_cors_rejects_non_local_origins(client):
+    r = client.get("/health", headers={"Origin": "http://example.com"})
+    assert r.status_code == 200
+    assert "access-control-allow-origin" not in r.headers
+
+
 def test_check_returns_full_schema(client):
     mock_client = _make_openai_stub(STUB_ANSWER)
     with patch("app.composer._get_client", return_value=mock_client):
