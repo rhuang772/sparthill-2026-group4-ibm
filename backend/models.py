@@ -33,3 +33,32 @@ class HeightLimit(BaseModel):
     cells_checked: int
     map_effective: str | None        # MAP_EFF of the data
     source: str = "FAA UAS Facility Map"
+    
+class TfrItem(BaseModel):
+    notam_id: str
+    type: str | None
+    description: str | None
+    area_name: str | None
+    floor_ft: float | None
+    floor_datum: str | None          # "MSL" or "AGL"
+    ceiling_ft: float | None
+    ceiling_datum: str | None
+    effective: str | None
+    expires: str | None
+    time_status: str                 # "active", "scheduled", "expired", "unknown"
+    reaches_drone_altitudes: bool    # floor at or below 400 ft
+
+
+class TfrResult(BaseModel):
+    lat: float
+    lon: float
+    radius_m: float
+    status: str                      # "restricted", "clear", or "unknown"
+    tfrs: list[TfrItem]
+    tfrs_checked: int
+    unresolved_notams: list[str]     # TFRs whose details couldn't be loaded
+    data_fetched_at: str | None
+    data_age_seconds: int | None
+    stale: bool
+    note: str | None
+    source: str = "FAA tfr.faa.gov"
