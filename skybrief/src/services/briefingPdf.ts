@@ -1,7 +1,6 @@
-import type { SavedBriefing } from './offlineStorage';
-import { offlineStatus } from './freshness';
+import type { BriefingPack, FlightPlan } from '../types';
 
-/** Dependency-free, offline PDF export. Keeps all saved briefing details and citations. */
+/** Dependency-free PDF export for the clearly labeled demo briefing. */
 const WIDTH = 612;
 const HEIGHT = 792;
 const MARGIN = 46;
@@ -53,7 +52,13 @@ function splitLines(input: string, max = CHARS_PER_LINE): string[] {
 }
 
 type PdfPage = { commands: string[]; y: number };
-function buildPdfPages(item: SavedBriefing): PdfPage[] {
+interface DemoBriefingPdf {
+  briefing: BriefingPack;
+  flightPlan: FlightPlan | null;
+  generatedAt: string;
+}
+
+function buildPdfPages(item: DemoBriefingPdf): PdfPage[] {
   const pages: PdfPage[] = [];
   let page: PdfPage;
   const addPage = () => {
@@ -61,7 +66,7 @@ function buildPdfPages(item: SavedBriefing): PdfPage[] {
     pages.push(page);
     // A standing warning on EVERY page, even if printed separately.
     page.commands.push('0.72 0.14 0.14 rg');
-    page.commands.push(`BT /F2 9 Tf ${MARGIN} ${HEIGHT - 33} Td (${escapePdf('SAVED COPY - NOT LIVE FAA AUTHORIZATION')}) Tj ET`);
+    //page.commands.push(`BT /F2 9 Tf ${MARGIN} ${HEIGHT - 33} Td (${escapePdf('DEMO PDF - NOT LIVE FAA AUTHORIZATION')}) Tj ET`);
     page.commands.push('0 0 0 rg');
   };
   addPage();
@@ -76,20 +81,16 @@ function buildPdfPages(item: SavedBriefing): PdfPage[] {
   }
   function section(title: string) { page.y -= 5; lines(title, true, 12, 7); }
 
-  lines('SkyBrief - Saved Flight Briefing', true, 17, 12);
-  lines(item.demo ? 'DEMO / MOCK DATA - NOT REAL FLIGHT CONDITIONS' : 'Saved briefing - advisory only', true, 11, 8);
+  lines('SkyBrief - Flight Briefing', true, 17, 12);
+  //lines('DEMO / MOCK DATA - NOT REAL FLIGHT CONDITIONS', true, 11, 8);
   lines(`Location: ${item.flightPlan?.location.displayName ?? item.briefing.locationLabel}`);
   if (item.flightPlan) {
     lines(`Coordinates: ${item.flightPlan.location.lat}, ${item.flightPlan.location.lng}`);
     lines(`Planned flight: ${item.flightPlan.date} ${item.flightPlan.time} (local as entered)`);
     lines(`Planned altitude: ${item.flightPlan.plannedAltitudeFt} ft AGL`);
   } else lines(`Planned flight: ${item.briefing.dateTimeLabel}`);
-  lines(`Saved on device: ${item.savedAt}`);
+  lines(`PDF generated at: ${item.generatedAt}`);
   lines(`Briefing generated at: ${item.briefing.generatedAt}`);
-  lines(`Weather retrieved at: ${item.sources?.weather?.fetchedAt ?? 'Not available / not verified'}`);
-  lines(`FAA data retrieved at: ${item.sources?.faa?.fetchedAt ?? 'Not available / not verified'}`);
-  const freshness = offlineStatus(item.sources?.weather?.fetchedAt, item.sources?.faa?.fetchedAt);
-  lines(`Offline safety status at export: ${freshness === 'caution' ? 'CAUTION - source data missing or stale' : 'UNVERIFIED - refresh before flying'}`, true);
   lines(`Original verdict (NOT revalidated): ${item.briefing.verdict.result.toUpperCase()}`, true);
   lines('Downloaded copies are static snapshots. Conditions and restrictions can change.', true);
   lines('Verify current FAA restrictions, authorization needs and weather before flying.', true);
@@ -117,13 +118,13 @@ function buildPdfPages(item: SavedBriefing): PdfPage[] {
   lines(item.briefing.alternative.reason);
   lines(`Coordinates: ${item.briefing.alternative.coordinates.lat}, ${item.briefing.alternative.coordinates.lng}`);
   section('Privacy and limitations');
-  lines('This export is stored wherever you choose to save it. Deleting the briefing inside SkyBrief does not delete this PDF.');
+  lines('This demo report is a static PDF file. Conditions and restrictions can change.');
   lines('This report is educational and not official clearance or legal advice.');
   return pages;
 }
 
 /** Returns raw PDF bytes; no network calls or dependencies. */
-export function createBriefingPdf(item: SavedBriefing): Uint8Array {
+export function createBriefingPdf(item: DemoBriefingPdf): Uint8Array {
   const pages = buildPdfPages(item);
   const objects: string[] = [];
   const add = (s: string) => { objects.push(s); return objects.length; };
@@ -133,7 +134,7 @@ export function createBriefingPdf(item: SavedBriefing): Uint8Array {
   const boldId = add('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>');
   const pageIds: number[] = [];
   pages.forEach((page, index) => {
-    page.commands.push(`BT /F1 8 Tf ${MARGIN} 32 Td (${escapePdf(`SkyBrief | Page ${index + 1} of ${pages.length} | Saved snapshot`)}) Tj ET`);
+    page.commands.push(`BT /F1 8 Tf ${MARGIN} 32 Td (${escapePdf(`SkyBrief | Page ${index + 1} of ${pages.length} | Demo snapshot`)}) Tj ET`);
     const stream = page.commands.join('\n') + '\n';
     const streamId = add(`<< /Length ${stream.length} >>\nstream\n${stream}endstream`);
     pageIds.push(add(`<< /Type /Page /Parent ${pagesId} 0 R /MediaBox [0 0 ${WIDTH} ${HEIGHT}] /Resources << /Font << /F1 ${regularId} 0 R /F2 ${boldId} 0 R >> >> /Contents ${streamId} 0 R >>`));
@@ -153,15 +154,16 @@ export function createBriefingPdf(item: SavedBriefing): Uint8Array {
   return new TextEncoder().encode(pdf);
 }
 
-/** Trigger an actual .pdf file download directly in the user's browser. */
-export function downloadBriefingPdf(item: SavedBriefing): void {
-  const bytes = createBriefingPdf(item);
+/** Trigger an actual demo .pdf file download directly in the user's browser. */
+export function downloadDemoBriefingPdf(briefing: BriefingPack, flightPlan: FlightPlan | null): void {
+  const generatedAt = new Date().toISOString();
+  const bytes = createBriefingPdf({ briefing, flightPlan, generatedAt });
   const blob = new Blob([new Uint8Array(bytes)], { type: 'application/pdf' });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');
-  const date = item.flightPlan?.date || item.savedAt.slice(0, 10);
+  const date = flightPlan?.date || generatedAt.slice(0, 10);
   anchor.href = url;
-  anchor.download = `SkyBrief-${date}-${item.id.slice(0, 8)}.pdf`;
+  anchor.download = `SkyBrief-demo-${date}.pdf`;
   document.body.appendChild(anchor);
   anchor.click();
   anchor.remove();

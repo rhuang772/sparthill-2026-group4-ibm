@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 import httpx
 
-from models import PopulationFeature, PopulationResult
+from backend.models import PopulationFeature, PopulationResult
 import logging
 
 logger = logging.getLogger(__name__)
@@ -16,10 +16,6 @@ env_path = Path(__file__).resolve().parent.parent / ".env"
 load_dotenv(env_path)
 
 GEOAPIFY_API_KEY = os.getenv("GEOAPIFY_API_KEY")
-
-if not GEOAPIFY_API_KEY:
-    raise RuntimeError("GEOAPIFY_API_KEY is not configured")
-
 
 class PopulationUnavailable(Exception):
     """Geoapify failed, is not configured, or returned an unexpected response."""
@@ -99,8 +95,6 @@ class PopulationService:
             "lang": "en",
             "apiKey": self.api_key,
         }
-        print("DEBUG FULL URL:", self.client.build_request("GET", self.URL, params=params).url)
-
         try:
             response = await self.client.get(
                 self.URL,

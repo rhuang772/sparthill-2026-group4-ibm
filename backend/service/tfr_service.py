@@ -8,7 +8,7 @@ from datetime import datetime, timedelta, timezone, time as dtime
 
 import httpx
 
-from models import TfrItem, TfrResult
+from backend.models import TfrItem, TfrResult
 
 log = logging.getLogger("tfr")
 

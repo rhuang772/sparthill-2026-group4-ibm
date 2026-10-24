@@ -2,7 +2,7 @@ from datetime import datetime, timedelta, timezone
 
 import httpx
 
-from models import Weather, WeatherHour, WeatherSummary, WeatherForecast
+from backend.models import Weather, WeatherForecast, WeatherHour, WeatherSummary
 
 
 class WeatherUnavailable(Exception):

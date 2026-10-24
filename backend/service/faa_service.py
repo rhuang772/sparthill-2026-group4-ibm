@@ -1,6 +1,6 @@
 import httpx
 
-from models import HeightLimit
+from backend.models import HeightLimit
 
 
 class FaaUnavailable(Exception):

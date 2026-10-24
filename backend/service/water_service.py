@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 
 import httpx
 
-from models import WaterBody, WaterResult
+from backend.models import WaterBody, WaterResult
 
 log = logging.getLogger("water")
 

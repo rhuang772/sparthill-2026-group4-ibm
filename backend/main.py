@@ -1,7 +1,10 @@
 from contextlib import asynccontextmanager
 import httpx
 from fastapi import FastAPI
-from controller import router as weather_router, faa_router, tfr_router, water_router, population_router, park_router
+from backend.controller import (
+    faa_router, park_router, population_router, router as weather_router,
+    tfr_router, water_router,
+)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

@@ -1,5 +1,4 @@
 import { useState, useEffect }from 'react';
-import { saveBriefing } from '../services/offlineStorage';
 import { useNavigate } from 'react-router-dom';
 import AppShell from '../components/AppShell';
 import BackButton from '../components/BackButton';
@@ -7,15 +6,15 @@ import { useAppContext } from '../context/AppContext';
 import type { CheckResponse } from '../types';
 import { mockBriefing, mockBriefingNoGo } from '../data/mockBriefing';
 import { isNearSJCAirspace } from '../utils/caScope';
+import { downloadDemoBriefingPdf } from '../services/briefingPdf';
 import styles from './BriefingPage.module.css';
 
 const API_BASE = import.meta.env.VITE_API_BASE ?? 'http://localhost:8000';
 
-/** Convert "2025-12-01" + "14:00" → "2025-12-01T14:00:00" (local, no Z so the
- *  backend treats it as a naive hint rather than forcing UTC). */
+/** Convert the locally entered flight date/time to the UTC ISO format used by the APIs. */
 function toFlightTime(date: string, time: string): string | null {
   if (!date || !time) return null;
-  return `${date}T${time}:00`;
+  return new Date(`${date}T${time}:00`).toISOString();
 }
 
 export default function BriefingPage() {
@@ -36,14 +35,18 @@ export default function BriefingPage() {
     if (flightPlan.plannedAltitudeFt) params.set('planned_altitude_ft', String(flightPlan.plannedAltitudeFt));
     if (flightPlan.radiusMeters)      params.set('radius_m', String(flightPlan.radiusMeters));
     const ft = toFlightTime(flightPlan.date, flightPlan.time);
-    if (ft) params.set('flight_time', ft);
+    if (ft) params.set('start', ft);
 
     setLoading(true);
     setError(null);
 
-    fetch(`${API_BASE}/check?${params}`)
+    fetch(`${API_BASE}/briefing?${params}`)
       .then(r => {
-        if (!r.ok) throw new Error(`API error ${r.status}`);
+        if (!r.ok) {
+          return r.text().then(detail => {
+            throw new Error(`API error ${r.status}: ${detail}`);
+          });
+        }
         return r.json() as Promise<CheckResponse>;
       })
       .then(data => {
@@ -67,9 +70,7 @@ export default function BriefingPage() {
   const timeLabel = flightPlan?.time ?? '';
   const subLabel = [dateLabel, timeLabel].filter(Boolean).join(' · ');
 
-  // The "save offline" demo button stores the canned mock scenario (not the
-  // live API response) — it's explicitly a demo artifact, picked the same
-  // way the old mock-only BriefingPage chose between its two scenarios.
+  // The PDF button exports a clearly labeled demo scenario, not live API data.
   const pack =
     flightPlan && isNearSJCAirspace(flightPlan.location.lat, flightPlan.location.lng)
       ? mockBriefingNoGo
@@ -128,14 +129,15 @@ export default function BriefingPage() {
 
         <section className={styles.section}>
           <p role="status" style={{marginBottom: '0.75rem'}}>Demo scenario only — these findings are mocked, not a live safety or authorization check.</p>
-          <button className={styles.ctaButton} onClick={async () => {
+          <button className={styles.ctaButton} onClick={() => {
             try {
-              await saveBriefing({ briefing: pack, flightPlan, demo: true });
-              setSaveMessage('Demo briefing saved on this device.');
-            } catch { setSaveMessage('Unable to save locally. Check browser storage settings.'); }
-          }}>Save this demo briefing offline</button>
+              downloadDemoBriefingPdf(pack, flightPlan);
+              setSaveMessage('Demo briefing PDF downloaded.');
+            } catch {
+              setSaveMessage('Unable to create the demo briefing PDF.');
+            }
+          }}>Save this demo briefing offline (PDF)</button>
           <p role="status">{saveMessage}</p>
-          <p><a href="/saved">View saved briefings &amp; privacy settings</a></p>
         </section>
         {/* CTA */}
         {response && (

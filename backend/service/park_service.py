@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 import httpx
 import logging
 
-from models import ProtectedAreaFeature, ProtectedAreaResult
+from backend.models import ProtectedAreaFeature, ProtectedAreaResult
 
 logger = logging.getLogger(__name__)
 

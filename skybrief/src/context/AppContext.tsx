@@ -1,13 +1,13 @@
 import React, { createContext, useContext, useState } from 'react';
 import type { PilotProfile, FlightPlan } from '../types';
-import { clearPrivateData, readPreferences, savePreferences } from '../services/offlineStorage';
+import { clearPrivateData, readPreferences, savePreferences } from '../services/preferencesStorage';
 
 interface AppContextValue {
   pilotProfile: PilotProfile | null;
   setPilotProfile: (profile: PilotProfile) => void;
   flightPlan: FlightPlan | null;
   setFlightPlan: (plan: FlightPlan) => void;
-  resetPrivateData: () => Promise<void>;
+  resetPrivateData: () => void;
 }
 
 const AppContext = createContext<AppContextValue | undefined>(undefined);
@@ -26,8 +26,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     updateFlightPlan(plan);
   }
 
-  async function resetPrivateData() {
-    await clearPrivateData();
+  function resetPrivateData() {
+    clearPrivateData();
     updatePilotProfile(null);
     updateFlightPlan(null);
   }
