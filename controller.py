@@ -14,9 +14,15 @@ async def get_weather(
     service: WeatherService = Depends(get_weather_service),
 ):
     try:
-        return await service.get_current(lat, lon)
+        weather = await service.get_current(lat, lon)
+        return weather
+
     except WeatherUnavailable:
-        raise HTTPException(status_code=502, detail="Weather provider unavailable")
+        raise HTTPException(
+            status_code=502,
+            detail="Weather provider unavailable"
+        )
+
     
 faa_router = APIRouter(prefix="/api/height-limit", tags=["faa"])
 
