@@ -1,0 +1,59 @@
+:root {
+  /* ── Backgrounds ─────────────────────────────── */
+  --color-bg:            #F5F6FA;   /* warm off-white page background    */
+  --color-surface:       #FFFFFF;   /* card / panel surfaces             */
+  --color-surface-raised:#EEF0F8;   /* inset / slightly raised elements  */
+  --color-border:        #DDE1EE;   /* card borders, dividers            */
+
+  /* ── Brand & accents ─────────────────────────── */
+  --color-brand:         #0F766E;   /* dark green/turquoise — primary brand */
+  --color-brand-hover:   #115E59;   /* darker green on hover             */
+  --color-brand-subtle:  #CCFBF1;   /* turquoise tint background         */
+  --color-accent:        #F59E0B;   /* amber — retained as warm accent   */
+  --color-accent-subtle: #FFFBEB;   /* amber tint background             */
+
+  /* ── Text ───────────────────────────────────── */
+  --color-text-primary:  #042F2E;   /* very dark green-teal — high contrast */
+  --color-text-secondary:#52706C;   /* muted sage-gray                   */
+  --color-text-inverse:  #FFFFFF;   /* text on dark/brand backgrounds    */
+
+  /* ── Verdicts ────────────────────────────────── */
+  --color-success:       #16A34A;   /* green — Go                        */
+  --color-success-subtle:#DCFCE7;
+  --color-caution:       #D97706;   /* amber — Caution (accessible dark) */
+  --color-caution-subtle:#FEF9C3;
+  --color-danger:        #DC2626;   /* red — No-Go                       */
+  --color-danger-subtle: #FEE2E2;
+
+  /* ── Rule layer badges ───────────────────────── */
+  --color-federal:       #2563EB;   /* blue                              */
+  --color-federal-subtle:#DBEAFE;
+  --color-ca-state:      #D97706;   /* amber-brown                       */
+  --color-ca-state-subtle:#FEF3C7;
+  --color-local:         #BE185D;   /* rose                              */
+  --color-local-subtle:  #FCE7F3;
+
+  /* ── Skye chat ───────────────────────────────── */
+  --color-skye-bg:       #0F766E;   /* Skye bubble background            */
+  --color-user-bubble:   #CCFBF1;   /* user bubble — light turquoise     */
+
+  /* ── Shape ───────────────────────────────────── */
+  --radius-sm:           6px;
+  --radius-md:           10px;
+  --radius-lg:           16px;
+  --radius-xl:           24px;
+
+  /* ── Elevation ───────────────────────────────── */
+  --shadow-sm:           0 1px 4px rgba(15, 118, 110, 0.07);
+  --shadow-card:         0 2px 12px rgba(15, 118, 110, 0.10), 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-raised:       0 8px 32px rgba(15, 118, 110, 0.14), 0 2px 8px rgba(0,0,0,0.07);
+
+  /* ── Typography ──────────────────────────────── */
+  --text-base:           16px;
+  --text-sm:             14px;
+  --text-xs:             13px;
+  --text-label:          12px;
+
+  /* ── Touch targets ───────────────────────────── */
+  --tap-target:          52px;
+}

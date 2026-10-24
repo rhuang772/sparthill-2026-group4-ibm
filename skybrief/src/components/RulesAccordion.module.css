@@ -1,0 +1,138 @@
+.accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.section {
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.875rem 1.25rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-primary);
+  border-bottom: 1px solid var(--color-border);
+  transition: background 0.15s;
+}
+
+.sectionHeader:hover {
+  background: var(--color-surface-raised);
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  color: #fff;
+}
+
+.badgeFederal {
+  background: var(--color-federal);
+}
+
+.badgeCaState {
+  background: var(--color-ca-state);
+}
+
+.badgeLocal {
+  background: var(--color-local);
+}
+
+.count {
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+}
+
+.findingList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.findingItem {
+  display: flex;
+  gap: 0.875rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.findingItem:last-child {
+  border-bottom: none;
+}
+
+.findingIcon {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.findingBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.findingTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.findingTitle {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.mockedBadge {
+  display: inline-block;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  color: var(--color-caution);
+  border: 1px solid var(--color-caution);
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.findingExplanation {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.citation {
+  font-size: 0.78125rem;
+  color: var(--color-brand);
+  text-decoration: none;
+  margin-top: 0.125rem;
+}
+
+.citation:hover {
+  text-decoration: underline;
+}
