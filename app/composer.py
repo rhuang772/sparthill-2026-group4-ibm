@@ -534,7 +534,7 @@ async def check_location(
         f"Planned flight time: {ft_str or 'not specified'}. "
         f"Planned altitude: {alt_str}. "
         f"Flight area radius: {radius_str}."
-        f"Please give note of weather conditions, if any restrictions are present, and if any nearby options are available."
+        f"Please give note of any restrictions that are present, and if any nearby options are available."
     )
 
     messages: list[dict] = [
