@@ -1,12 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from datetime import datetime, timedelta, timezone
 
-from models import Weather, WeatherForecast, HeightLimit, TfrResult, WaterResult, PopulationResult
+from models import Weather, WeatherForecast, HeightLimit, TfrResult, WaterResult, PopulationResult, ProtectedAreaResult
 from service.water_service import WaterService, WaterUnavailable
 from service.weather_service import WeatherService, WeatherUnavailable
 from service.faa_service import FaaService, FaaUnavailable
 from service.tfr_service import TfrService
 from service.population_service import PopulationService, PopulationUnavailable
+from service.park_service import ParkService, ParkUnavailable
 
 #--------------- Weather API ----------------
 
@@ -179,4 +180,28 @@ async def get_population_risk(
         raise HTTPException(
             status_code=502,
             detail="Geoapify population-context service unavailable",
+        ) from exc
+
+# --------------- Protected Areas / State Park API ----------------
+
+park_router = APIRouter(prefix="/api/park-risk", tags=["parks"])
+
+def get_park_service(request: Request) -> ParkService:
+    # If your app stores an http_client on app.state, you can pass it, 
+    # or instantiate ParkService directly.
+    return ParkService()
+
+@park_router.get("", response_model=ProtectedAreaResult)
+async def get_park_risk(
+    lat: float = Query(..., ge=-90, le=90, description="Latitude coordinate"),
+    lon: float = Query(..., ge=-180, le=180, description="Longitude coordinate"),
+    radius_m: float = Query(500.0, ge=0, le=10000, description="Search radius in meters"),
+    service: ParkService = Depends(get_park_service),
+):
+    try:
+        return await service.get_parks(lat, lon, radius_m)
+    except ParkUnavailable as exc:
+        raise HTTPException(
+            status_code=502,
+            detail=f"Protected area data service unavailable: {exc}",
         ) from exc
