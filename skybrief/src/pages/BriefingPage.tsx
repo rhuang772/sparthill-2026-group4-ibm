@@ -5,6 +5,8 @@ import AppShell from '../components/AppShell';
 import BackButton from '../components/BackButton';
 import { useAppContext } from '../context/AppContext';
 import type { CheckResponse } from '../types';
+import { mockBriefing, mockBriefingNoGo } from '../data/mockBriefing';
+import { isNearSJCAirspace } from '../utils/caScope';
 import styles from './BriefingPage.module.css';
 
 const API_BASE = import.meta.env.VITE_API_BASE ?? 'http://localhost:8000';
@@ -64,6 +66,14 @@ export default function BriefingPage() {
       : '';
   const timeLabel = flightPlan?.time ?? '';
   const subLabel = [dateLabel, timeLabel].filter(Boolean).join(' · ');
+
+  // The "save offline" demo button stores the canned mock scenario (not the
+  // live API response) — it's explicitly a demo artifact, picked the same
+  // way the old mock-only BriefingPage chose between its two scenarios.
+  const pack =
+    flightPlan && isNearSJCAirspace(flightPlan.location.lat, flightPlan.location.lng)
+      ? mockBriefingNoGo
+      : mockBriefing;
 
   return (
     <AppShell currentStep={3}>
