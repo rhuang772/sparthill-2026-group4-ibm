@@ -1,0 +1,327 @@
+Chapter 2:
+Airspace Classification, Operating Requirements, and Flight Restrictions
+Introduction
+The two categories of airspace are: regulatory and nonregulatory. Within these two categories, there
+are four types: controlled, uncontrolled, special use, and other airspace. The categories and types of
+airspace are dictated by the complexity or density of aircraft movements, nature of the operations
+conducted within the airspace, the level of safety required, and national and public interest. Figure 2-1
+presents a profile view of the dimensions of various classes of airspace.
+Figure 2-1. Airspace profile.
+Controlled Airspace
+Controlled airspace is a generic term that covers the different classifications of airspace and defined
+dimensions within which air traffic control (ATC) service is provided in accordance with the airspace
+classification. Controlled airspace that is of concern to the remote pilot is:
+• Class B
+• Class C
+• Class D
+• Class E
+Class B Airspace
+Class B airspace is generally airspace from the surface to 10,000 feet mean sea level (MSL)
+surrounding the nation’s busiest airports in terms of airport operations or passenger enplanements.
+The configuration of each Class B airspace area is individually tailored, consists of a surface area and
+two or more layers (some Class B airspace areas resemble upside-down wedding cakes), and is
+designed to contain all published instrument procedures once an aircraft enters the airspace. A
+remote pilot must receive authorization from ATC before operating in the Class B airspace.
+Chapter 2: Airspace Classification, Operating Requirements, and Flight Restrictions
+Remote Pilot – Small Unmanned Aircraft Systems Study Guide 6
+Class C Airspace
+Class C airspace is generally airspace from the surface to 4,000 feet above the airport elevation
+(charted in MSL) surrounding those airports that have an operational control tower, are serviced by
+a radar approach control, and have a certain number of instrument flight rules (IFR) operations or
+passenger enplanements. Although the configuration of each Class C area is individually tailored, the
+airspace usually consists of a surface area with a five nautical mile (NM) radius, an outer circle with a
+ten NM radius that extends from 1,200 feet to 4,000 feet above the airport elevation. A remote pilot
+must receive authorization before operating in Class C airspace.
+Class D Airspace
+Class D airspace is generally airspace from the surface to 2,500 feet above the airport elevation
+(charted in MSL) surrounding those airports that have an operational control tower. The
+configuration of each Class D airspace area is individually tailored and, when instrument procedures
+are published, the airspace is normally designed to contain the procedures. Arrival extensions for
+instrument approach procedures (IAPs) may be Class D or Class E airspace. A remote pilot must
+receive ATC authorization before operating in Class D airspace.
+Class E Airspace
+Class E airspace is the controlled airspace not classified as Class A, B, C, or D airspace. A large
+amount of the airspace over the United States is designated as Class E airspace. This provides
+sufficient airspace for the safe control and separation of aircraft during IFR operations. Chapter 3 of
+the Aeronautical Information Manual (AIM) explains the various types of Class E airspace.
+Sectional and other charts depict all locations of Class E airspace with bases below 14,500 feet MSL.
+In areas where charts do not depict a class E base, class E begins at 14,500 feet MSL. In most areas,
+the Class E airspace base is 1,200 feet above ground level (AGL). In many other areas, the Class E
+airspace base is either the surface or 700 feet AGL. Some Class E airspace begins at an MSL altitude
+depicted on the charts, instead of an AGL altitude. Class E airspace typically extends up to, but not
+including, 18,000 feet MSL (the lower limit of Class A airspace). All airspace above FL 600 is Class E
+airspace.
+Federal Airways, which are shown as blue lines on a sectional chart, are usually found within Class E
+airspace. Federal Airways start at 1,200’ AGL and go up to, but, not including 18,000’ MSL.
+In most cases, a remote pilot will not need ATC authorization to operate in Class E airspace.
+Uncontrolled Airspace
+Class G Airspace
+Uncontrolled airspace or Class G airspace is the portion of the airspace that has not been designated
+as Class A, B, C, D, or E. It is therefore designated uncontrolled airspace. Class G airspace extends
+from the surface to the base of the overlying Class E airspace. A remote pilot will not need ATC
+authorization to operate in Class G airspace.
+Special Use Airspace
+Special use airspace or special area of operation (SAO) is the designation for airspace in which certain
+activities must be confined, or where limitations may be imposed on aircraft operations that are not
+part of those activities. Certain special use airspace areas can create limitations on the mixed use of
+airspace. The special use airspace depicted on instrument charts includes the area name or number, 
+Chapter 2: Airspace Classification, Operating Requirements, and Flight Restrictions
+Remote Pilot – Small Unmanned Aircraft Systems Study Guide 7
+effective altitude, time and weather conditions of operation, the controlling agency, and the chart
+panel location. On National Aeronautical Charting Group (NACG) en route charts, this information is
+available on one of the end panels. Special use airspace usually consists of:
+• Prohibited areas
+• Restricted areas
+• Warning areas
+• Military operation areas (MOAs)
+• Alert areas
+• Controlled firing areas (CFAs)
+Prohibited Areas
+Prohibited areas contain airspace of
+defined dimensions within which the
+flight of aircraft is prohibited. Such
+areas are established for security or
+other reasons associated with the
+national welfare. These areas are
+published in the Federal Register and
+are depicted on aeronautical charts.
+The area is charted as a “P” followed by
+a number (e.g., P-40). Examples of
+prohibited areas include Camp David
+and the National Mall in Washington,
+D.C., where the White House and the
+Congressional buildings are located.
+[Figure 2-2]
+Restricted Areas
+Restricted areas are areas where
+operations are hazardous to
+nonparticipating aircraft and contain
+airspace within which the flight of aircraft,
+while not wholly prohibited, is subject to
+restrictions. Activities within these areas
+must be confined because of their nature,
+or limitations may be imposed upon
+aircraft operations that are not a part of
+those activities, or both. Restricted areas
+denote the existence of unusual, often
+invisible, hazards to aircraft (e.g., artillery
+firing, aerial gunnery, or guided missiles).
+Penetration of restricted areas without
+authorization from the using or
+controlling agency may be extremely
+hazardous to the aircraft.
+Figure 2-2. An example of a prohibited area, P-40 around Camp David.
+Figure 2-3. Restricted areas on a sectional chart.
+Chapter 2: Airspace Classification, Operating Requirements, and Flight Restrictions
+Remote Pilot – Small Unmanned Aircraft Systems Study Guide 8
+1. If the restricted area is not active and has been released to the FAA, the ATC facility allows
+the aircraft to operate in the restricted airspace without issuing specific clearance for it to do
+so.
+2. If the restricted area is active and has not been released to the FAA, the ATC facility issues a
+clearance that ensures the aircraft avoids the restricted airspace.
+Restricted areas are charted with an “R” followed by a number (e.g., R-4401) and are depicted on
+the en route chart appropriate for use at the altitude or flight level (FL) being flown. [Figure 10-1]
+Restricted area information can be obtained on the back of the chart.
+Warning Areas
+Warning areas are similar in nature to
+restricted areas; however, the United
+States government does not have sole
+jurisdiction over the airspace. A warning
+area is airspace of defined dimensions,
+extending from 3 NM outward from the
+coast of the United States, containing
+activity that may be hazardous to
+nonparticipating aircraft. The purpose of
+such areas is to warn nonparticipating
+pilots of the potential danger. A warning
+area may be located over domestic or
+international waters or both. The airspace
+is designated with a “W” followed by a
+number (e.g., W-237). [Figure 2-4]
+Military Operation Areas (MOAs)
+MOAs consist of airspace with
+defined vertical and lateral
+limits established for the
+purpose of separating certain
+military training activities from
+IFR traffic. Whenever an MOA
+is being used, nonparticipating
+IFR traffic may be cleared
+through an MOA if IFR
+separation can be provided by
+ATC. Otherwise, ATC reroutes
+or restricts nonparticipating IFR
+traffic. MOAs are depicted on
+sectional, VFR terminal area,
+and en route low altitude
+charts and are not numbered
+(e.g., “Camden Ridge MOA”).
+[Figure 2-5] However, the MOA
+Figure 2-4. Requirements for airspace operations.
+Figure 2-5. Camden Ridge MOA is an example of a military operations area.
+Chapter 2: Airspace Classification, Operating Requirements, and Flight Restrictions
+Remote Pilot – Small Unmanned Aircraft Systems Study Guide 9
+is also further defined on the back of the sectional charts with times of operation, altitudes affected,
+and the controlling agency.
+Alert Areas
+Alert areas are depicted on aeronautical charts with an “A” followed by a number (e.g., A-211) to
+inform nonparticipating pilots of areas that may contain a high volume of pilot training or an
+unusual type of aerial activity. Pilots should exercise caution in alert areas. All activity within an alert
+area shall be conducted in accordance with regulations, without waiver, and pilots of participating
+aircraft, as well as pilots transiting the area, shall be equally responsible for collision avoidance.
+[Figure 2-6]
+Figure 2-6. Alert area (A-211).
+Controlled Firing Areas (CFAs)
+CFAs contain activities that, if not conducted in a controlled environment, could be hazardous to
+nonparticipating aircraft. The difference between CFAs and other special use airspace is that
+activities must be suspended when a spotter aircraft, radar, or ground lookout position indicates an
+aircraft might be approaching the area. There is no need to chart CFAs since they do not cause a
+nonparticipating aircraft to change its flight path.
+Other Airspace Areas
+“Other airspace areas” is a general term referring to the majority of the remaining airspace. It includes:
+• Local airport advisory (LAA)
+• Military training route (MTR)
+• Temporary flight restriction (TFR)
+• Parachute jump aircraft operations
+• Published VFR routes
+• Terminal radar service area (TRSA)
+• National security area (NSA)
+• Air Defense Identification Zones (ADIZ) land and water based and need for Defense VFR
+(DVFR) flight plan to operate VFR in this airspace
+• Flight Restricted Zones (FRZ) in vicinity of Capitol and White House 
+Chapter 2: Airspace Classification, Operating Requirements, and Flight Restrictions
+Remote Pilot – Small Unmanned Aircraft Systems Study Guide 10
+• Wildlife Areas/Wilderness Areas/National Parks and request to operate above 2,000 AGL
+• National Oceanic and Atmospheric Administration (NOAA) Marine Areas off the coast with
+requirement to operate above 2,000 AGL
+• Tethered Balloons for observation and weather recordings that extend on cables up to 60,000
+Local Airport Advisory (LAA)
+An advisory service provided by Flight Service facilities, which are located on the landing airport,
+using a discrete ground-to-air frequency or the tower frequency when the tower is closed. LAA
+services include local airport advisories, automated weather reporting with voice broadcasting, and
+a continuous Automated Surface Observing System (ASOS)/Automated Weather Observing Station
+(AWOS) data display, other continuous direct reading instruments, or manual observations available
+to the specialist.
+Military Training Routes (MTRs)
+MTRs are routes used by military aircraft to maintain proficiency in tactical flying. These routes are
+usually established below 10,000 feet MSL for operations at speeds in excess of 250 knots. Some
+route segments may be defined at higher altitudes for purposes of route continuity. Routes are
+identified as IFR (IR), and VFR (VR), followed by a number. [Figure 2-7] MTRs with no segment above
+1,500 feet AGL are identified by four number characters (e.g., IR1206, VR1207). MTRs that include
+one or more segments above 1,500 feet AGL are identified by three number characters (e.g., IR206,
+VR207). IFR low altitude en route charts depict all IR routes and all VR routes that accommodate
+operations above 1,500 feet AGL. IR routes are conducted in accordance with IFR regardless of
+weather conditions. VFR sectional charts depict military training activities, such as IR, VR, MOA,
+restricted area, warning area, and alert area information.
+Figure 2-7. Military training route (MTR) chart symbols.
+Temporary Flight Restrictions (TFR)
+A flight data center (FDC) Notice to Airmen (NOTAM) is issued to designate a TFR. The NOTAM
+begins with the phrase “FLIGHT RESTRICTIONS” followed by the location of the temporary
+restriction, effective time period, area defined in statute miles, and altitudes affected. The NOTAM 
+Chapter 2: Airspace Classification, Operating Requirements, and Flight Restrictions
+Remote Pilot – Small Unmanned Aircraft Systems Study Guide 11
+also contains the FAA coordination facility and telephone number, the reason for the restriction,
+and any other information deemed appropriate. The pilot should check the NOTAMs as part of flight
+planning.
+Some of the purposes for establishing a TFR are:
+• Protect persons and property in the air or on the surface from an existing or imminent
+hazard.
+• Provide a safe environment for the operation of disaster relief aircraft.
+• Prevent an unsafe congestion of sightseeing aircraft above an incident or event, that may
+generate a high degree of public interest.
+• Protect declared national disasters for humanitarian reasons in the State of Hawaii.
+• Protect the President, Vice President, or other public figures.
+• Provide a safe environment for space agency operations.
+Since the events of September 11, 2001, the use of TFRs has become much more common. There
+have been a number of incidents of aircraft incursions into TFRs that have resulted in pilots
+undergoing security investigations and certificate suspensions. It is a pilot’s responsibility to be
+aware of TFRs in their proposed area of flight. One way to check is to visit the FAA website,
+www.tfr.faa.gov, and verify that there is not a TFR in the area.
+Parachute Jump Aircraft Operations
+Parachute jump aircraft operations are published in the Chart Supplement U.S. (formerly
+Airport/Facility Directory). Sites that are used frequently are depicted on sectional charts.
+Published VFR Routes
+Published VFR routes are for transitioning around, under, or through some complex airspace. Terms
+such as VFR flyway, VFR corridor, Class B airspace VFR transition route, and terminal area VFR route
+have been applied to such routes. These routes are generally found on VFR terminal area planning
+charts.
+Terminal Radar Service Areas (TRSAs)
+TRSAs are areas where participating pilots can receive additional radar services. The purpose of the
+service is to provide separation between all IFR operations and participating VFR aircraft.
+The primary airport(s) within the TRSA become(s) Class D airspace. The remaining portion of the
+TRSA overlies other controlled airspace, which is normally Class E airspace beginning at 700 or 1,200
+feet and established to transition to/ from the en route/terminal environment. TRSAs are depicted
+on VFR sectional charts and terminal area charts with a solid black line and altitudes for each
+segment. The Class D portion is charted with a blue segmented line. Participation in TRSA services is
+voluntary; however, pilots operating under VFR are encouraged to contact the radar approach
+control and take advantage of TRSA service.
+National Security Areas (NSAs)
+NSAs consist of airspace of defined vertical and lateral dimensions established at locations where
+there is a requirement for increased security and safety of ground facilities. Flight in NSAs may be
+temporarily prohibited by regulation under the provisions of Title 14 of the Code of Federal
+Regulations (14 CFR) part 99 and prohibitions are disseminated via NOTAM. Pilots are requested to
+voluntarily avoid flying through these depicted areas. 
+Chapter 2: Airspace Classification, Operating Requirements, and Flight Restrictions
+Remote Pilot – Small Unmanned Aircraft Systems Study Guide 12
+Air Traffic Control and the National Airspace System
+The primary purpose of the ATC system is to prevent a collision between aircraft operating in the
+system and to organize and expedite the flow of traffic. In addition to its primary function, the ATC
+system has the capability to provide (with certain limitations) additional services. The ability to provide
+additional services is limited by many factors, such as the volume of traffic, frequency congestion,
+quality of radar, controller workload, higher priority duties, and the pure physical inability to scan and
+detect those situations that fall in this category. It is recognized that these services cannot be provided
+in cases in which the provision of services is precluded by the above factors.
+Consistent with the aforementioned conditions, controllers shall provide additional service procedures
+to the extent permitted by higher priority duties and other circumstances. The provision of additional
+services is not optional on the part of the controller, but rather is required when the work situation
+permits. Provide ATC service in accordance with the procedures and minima in this order except when
+other procedures/minima are prescribed in a letter of agreement, FAA directive, or a military
+document.
+Operating Rules and Pilot/Equipment Requirements
+The safety of flight is a top priority of all pilots and the responsibilities associated with operating an
+aircraft should always be taken seriously. The air traffic system maintains a high degree of safety
+and efficiency with strict regulatory oversight of the FAA. Pilots fly in accordance with regulations
+that have served the United States well, as evidenced by the fact that the country has the safest
+aviation system in the world.
+All aircraft operating in today’s National Airspace System (NAS) has complied with the CFR governing
+its certification and maintenance; all pilots operating today have completed rigorous pilot
+certification training and testing. Of equal importance is the proper execution of preflight planning,
+aeronautical decision-making (ADM) and risk management. ADM involves a systematic approach to
+risk assessment and stress management in aviation, illustrates how personal attitudes can influence
+decision-making, and how those attitudes can be modified to enhance safety. More detailed
+information regarding ADM and risk mitigation can be found in Chapter 10, “Aeronautical DecisionMaking and Judgment,” of this study guide.
+Pilots also comply with very strict FAA general operating and flight rules as outlined in the CFR,
+including the FAA’s important “see and avoid” mandate. These regulations provide the historical
+foundation of the FAA regulations governing the aviation system and the individual classes of
+airspace.
+Visual Flight Rules (VFR) Terms & Symbols
+Remote pilots need to be familiar with the following information from the FAA Aeronautical Chart
+User’s Guide website:
+• All information on the VFR Terms tab
+• The following sections under “VFR Aeronautical Chart Symbols” on the VFR Symbols tab:
+o Airports
+o Airspace Information
+o Navigational and Procedural Information
+o Chart Limits
+o Culture
+Chapter 2: Airspace Classification, Operating Requirements, and Flight Restrictions
+Remote Pilot – Small Unmanned Aircraft Systems Study Guide 13
+o Hydrography
+o Relief
+Notices to Airmen (NOTAMs)
+Notices to Airmen, or NOTAMs, are time-critical aeronautical information either temporary in nature
+or not sufficiently known in advance to permit publication on aeronautical charts or in other
+operational publications. The information receives immediate dissemination via the National Notice to
+Airmen (NOTAM) System. NOTAMs contain current notices to airmen that are considered essential to
+the safety of flight, as well as supplemental data affecting other operational publications. There are
+many different reasons that NOTAMs are issued. Following are some of those reasons:
+• Hazards, such as air shows, parachute jumps, kite flying, and rocket launches
+• Flights by important people such as heads of state
+• Inoperable lights on tall obstructions
+• Temporary erection of obstacles near airfields
+• Passage of flocks of birds through airspace (a NOTAM in this category is known as a BIRDTAM)
+NOTAMs are available in printed form through subscription from the Superintendent of Documents
+or online at PilotWeb, which provides access to current NOTAM information. Local airport NOTAMs
+can be obtained online from various websites. Some examples are www.fltplan.com and
+www.aopa.org/whatsnew/notams.html. Most sites require a free registration and acceptance of
+terms but offer pilots updated NOTAMs and TFRs

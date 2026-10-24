@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from app.rules.chroma_dummy import get_store
+from app.rules.chroma_store import get_store
 
 # ---------------------------------------------------------------------------
 # OpenAI function schema
@@ -20,10 +20,12 @@ SEARCH_RULES_SCHEMA: dict[str, Any] = {
     "function": {
         "name": "search_rules",
         "description": (
-            "Search the local FAA rules corpus for relevant regulation chunks. "
+            "Search the FAA Remote Pilot (Part 107) study guide: airspace classes and "
+            "authorization, special use and other airspace, TFRs, NOTAMs, aviation weather "
+            "reports and forecasts, and how weather affects small drones. "
             "Use semantic terms only — NEVER include coordinates, lat/lon values, "
-            "or addresses in the query. Use tags to narrow the search to specific "
-            "rule categories (e.g. 'laanc', 'tfr', 'altitude', 'nsufr')."
+            "or addresses in the query. Use tags to narrow the search (e.g. 'laanc', "
+            "'tfr', 'wind', 'thunderstorm')."
         ),
         "parameters": {
             "type": "object",
@@ -40,10 +42,14 @@ SEARCH_RULES_SCHEMA: dict[str, Any] = {
                     "type": "array",
                     "items": {"type": "string"},
                     "description": (
-                        "Optional list of rule-category tags to filter results. "
-                        "Known tags: controlled_airspace, laanc, uasfm, ceiling, "
-                        "altitude, tfr, notam, stadium, sua, prohibited_area, "
-                        "nsufr, military, weather, traffic, pending."
+                        "Optional list of topic tags; chunks matching any tag are returned. "
+                        "Known tags: airspace, controlled_airspace, laanc, "
+                        "uncontrolled_airspace, sua, prohibited_area, restricted_area, "
+                        "military, other_airspace, national_security, nsufr, tfr, notam, "
+                        "atc, operating_rules, charts, weather, weather_reports, metar, "
+                        "forecast, taf, thunderstorm, performance, density_altitude, "
+                        "pressure, wind, stability, moisture, clouds, icing, ceiling, "
+                        "visibility."
                     ),
                     "default": [],
                 },

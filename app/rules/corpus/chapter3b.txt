@@ -1,0 +1,272 @@
+Chapter 3b:
+Effects of Weather on Small Unmanned Aircraft Performance
+Introduction
+This chapter discusses the factors that affect aircraft performance, which include the aircraft weight,
+atmospheric conditions, runway environment, and the fundamental physical laws governing the forces
+acting on an aircraft.
+Since the characteristics of the atmosphere have a major effect on performance, it is necessary to
+review two dominant factors—pressure and temperature.
+Density Altitude
+The more appropriate term for correlating aerodynamic performance in the nonstandard atmosphere
+is density altitude—the altitude in the standard atmosphere corresponding to a particular value of air
+density.
+As the density of the air increases (lower density altitude), aircraft performance increases. Conversely,
+as air density decreases (higher density altitude), aircraft performance decreases. A decrease in air
+density means a high density altitude; an increase in air density means a lower density altitude. Density
+altitude has a direct effect on aircraft performance.
+Air density is affected by changes in altitude, temperature, and humidity. High density altitude refers to
+thin air while low density altitude refers to dense air. The conditions that result in a high density
+altitude are high elevations, low atmospheric pressures, high temperatures, high humidity, or some
+combination of these factors. Lower elevations, high atmospheric pressure, low temperatures, and low
+humidity are more indicative of low density altitude.
+Effects of Pressure on Density
+Since air is a gas, it can be compressed or expanded. When air is compressed, a greater amount of
+air can occupy a given volume. Conversely, when pressure on a given volume of air is decreased, the
+air expands and occupies a greater space. That is, the original column of air at a lower pressure
+contains a smaller mass of air. In other words, the density is decreased. In fact, density is directly
+proportional to pressure. If the pressure is doubled, the density is doubled, and if the pressure is
+lowered, so is the density. This statement is true only at a constant temperature.
+Effects of Temperature on Density
+Increasing the temperature of a substance decreases its density. Conversely, decreasing the
+temperature increases the density. Thus, the density of air varies inversely with temperature. This
+statement is true only at a constant pressure.
+In the atmosphere, both temperature and pressure decrease with altitude and have conflicting
+effects upon density. However, the fairly rapid drop in pressure as altitude is increased usually has
+the dominant effect. Hence, pilots can expect the density to decrease with altitude.
+Effects of Humidity (Moisture) on Density
+The preceding paragraphs are based on the presupposition of perfectly dry air. In reality, it is never
+completely dry. The small amount of water vapor suspended in the atmosphere may be negligible 
+Chapter 3b: Effects of Weather on Small Unmanned Aircraft Performance
+Remote Pilot – Small Unmanned Aircraft Systems Study Guide 22
+under certain conditions, but in other conditions humidity may become an important factor in the
+performance of an aircraft. Water vapor is lighter than air; consequently, moist air is lighter than dry
+air. Therefore, as the water content of the air increases, the air becomes less dense, increasing
+density altitude and decreasing performance. It is lightest or least dense when, in a given set of
+conditions, it contains the maximum amount of water vapor.
+Humidity, also called relative humidity, refers to the amount of water vapor contained in the
+atmosphere and is expressed as a percentage of the maximum amount of water vapor the air can
+hold. This amount varies with the temperature; warm air can hold more water vapor, while colder
+air can hold less. Perfectly dry air that contains no water vapor has a relative humidity of zero
+percent, while saturated air that cannot hold any more water vapor has a relative humidity of 100
+percent. Humidity alone is usually not considered an essential factor in calculating density altitude
+and aircraft performance; however, it does contribute.
+Performance
+Performance is a term used to describe the ability of an aircraft to accomplish certain things that make
+it useful for certain purposes.
+The primary factors most affected by performance are the takeoff and landing distance, rate of climb,
+ceiling, payload, range, speed, maneuverability, stability, and fuel economy.
+Climb Performance Factors
+Since weight, altitude and configuration changes affect excess thrust and power, they also affect
+climb performance. Climb performance is directly dependent upon the ability to produce either
+excess thrust or excess power.
+Weight has a very pronounced effect on aircraft performance. If weight is added to an aircraft, it
+must fly at a higher angle of attack (AOA) to maintain a given altitude and speed. This increases the
+induced drag of the wings, as well as the parasite drag of the aircraft. Increased drag means that
+additional thrust is needed to overcome it, which in turn means that less reserve thrust is available
+for climbing. Aircraft designers go to great lengths to minimize the weight, since it has such a
+marked effect on the factors pertaining to performance.
+A change in an aircraft’s weight produces a twofold effect on climb performance. An increase in
+altitude also increases the power required and decreases the power available. Therefore, the climb
+performance of an aircraft diminishes with altitude.
+Measurement of Atmosphere Pressure
+To provide a common reference, the International Standard Atmosphere (ISA) has been established.
+These standard conditions are the basis for most aircraft performance data. Standard sea level
+pressure is defined as 29.92 "Hg and a standard temperature of 59 °F (15 °C). Atmospheric pressure is
+also reported in millibars (mb), with 1 "Hg equal to approximately 34 mb. Standard sea level pressure is
+1,013.2 mb. Typical mb pressure readings range from 950.0 to 1,040.0 mb. Surface charts, high and low
+pressure centers, and hurricane data are reported using mb.
+Since weather stations are located around the globe, all local barometric pressure readings are
+converted to a sea level pressure to provide a standard for records and reports. To achieve this, each
+station converts its barometric pressure by adding approximately 1 "Hg for every 1,000 feet of 
+Chapter 3b: Effects of Weather on Small Unmanned Aircraft Performance
+Remote Pilot – Small Unmanned Aircraft Systems Study Guide 23
+elevation. For example, a station at 5,000 feet above sea level, with a reading of 24.92 "Hg, reports a
+sea level pressure reading of 29.92 "Hg.
+By tracking barometric pressure trends across a large area, weather forecasters can more accurately
+predict movement of pressure systems and the associated weather. For example, tracking a pattern of
+rising pressure at a single weather station generally indicates the approach of fair weather. Conversely,
+decreasing or rapidly falling pressure usually indicates approaching bad weather and, possibly, severe
+storms.
+Effect of Obstructions on Wind
+Another atmospheric hazard exists that can create problems for pilots. Obstructions on the ground
+affect the flow of wind and can be an unseen danger. Ground topography and large buildings can break
+up the flow of the wind and create wind gusts that change rapidly in direction and speed. These
+obstructions range from man-made structures, like hangars, to large natural obstructions, such as
+mountains, bluffs, or canyons.
+The intensity of the turbulence associated with ground obstructions depends on the size of the
+obstacle and the primary velocity of the wind. This can affect the performance of any aircraft and can
+present a very serious hazard.
+This same condition is even more noticeable when flying in mountainous regions. [Figure 3-3] While
+the wind flows smoothly up the windward side of the mountain and the upward currents help to carry
+an aircraft over the peak of the mountain, the wind on the leeward side does not act in a similar
+manner. As the air flows down the leeward side of the mountain, the air follows the contour of the
+terrain and is increasingly turbulent. This tends to push an aircraft into the side of a mountain. The
+stronger the wind, the greater the downward pressure and turbulence become.
+Figure 3-3. Turbulence in mountainous regions.
+Low-Level Wind Shear
+Wind shear is a sudden, drastic change in wind speed and/or direction over a very small area. Wind
+shear can subject an aircraft to violent updrafts and downdrafts, as well as abrupt changes to the
+horizontal movement of the aircraft. While wind shear can occur at any altitude, low-level wind shear
+is especially hazardous due to the proximity of an aircraft to the ground. Low-level wind shear is
+commonly associated with passing frontal systems, thunderstorms, temperature inversions, and strong
+upper level winds (greater than 25 knots). 
+Chapter 3b: Effects of Weather on Small Unmanned Aircraft Performance
+Remote Pilot – Small Unmanned Aircraft Systems Study Guide 24
+Wind shear is dangerous to an aircraft. It can rapidly change the performance of the aircraft and
+disrupt the normal flight attitude. For example, a tailwind quickly changing to a headwind causes an
+increase in airspeed and performance. Conversely, a headwind changing to a tailwind causes a
+decrease in airspeed and performance. In either case, a pilot must be prepared to react immediately to
+these changes to maintain control of the aircraft.
+The most severe type of low-level wind shear, a microburst, is associated with convective precipitation
+into dry air at cloud base. Microburst activity may be indicated by an intense rain shaft at the surface
+but virga at cloud base and a ring of blowing dust is often the only visible clue. A typical microburst has
+a horizontal diameter of 1–2 miles and a nominal depth of 1,000 feet. The lifespan of a microburst is
+about 5–15 minutes during which time it can produce downdrafts of up to 6,000 feet per minute (fpm)
+and headwind losses of 30–90 knots, seriously degrading performance. It can also produce strong
+turbulence and hazardous wind direction changes. During an inadvertent microburst encounter, the
+small UA may first experience a performance-increasing headwind, followed by performancedecreasing downdrafts, followed by a rapidly increasing tailwind. This can result in terrain impact or
+flight dangerously close to the ground. An encounter during approach involves the same sequence of
+wind changes and could force the small UA to the ground short of the intended landing area.
+It is important to remember that wind shear can affect any flight at any altitude. While wind shear may
+be reported, it often remains undetected and is a silent danger to aviation. Always be alert to the
+possibility of wind shear, especially when flying in and around thunderstorms and frontal systems.
+Atmospheric Stability
+The stability of the atmosphere depends on its ability to resist vertical motion. A stable atmosphere
+makes vertical movement difficult, and small vertical disturbances dampen out and disappear. In an
+unstable atmosphere, small vertical air movements tend to become larger, resulting in turbulent
+airflow and convective activity. Instability can lead to significant turbulence, extensive vertical clouds,
+and severe weather.
+The combination of moisture and temperature determine the stability of the air and the resulting
+weather. Cool, dry air is very stable and resists vertical movement, which leads to good and generally
+clear weather. The greatest instability occurs when the air is moist and warm, as it is in the tropical
+regions in the summer. Typically, thunderstorms appear on a daily basis in these regions due to the
+instability of the surrounding air.
+Inversion
+As air rises and expands in the atmosphere, the temperature decreases. There is an atmospheric
+anomaly that can occur; however, that changes this typical pattern of atmospheric behavior. When
+the temperature of the air rises with altitude, a temperature inversion exists. Inversion layers are
+commonly shallow layers of smooth, stable air close to the ground. The temperature of the air
+increases with altitude to a certain point, which is the top of the inversion. The air at the top of the
+layer acts as a lid, keeping weather and pollutants trapped below. If the relative humidity of the air
+is high, it can contribute to the formation of clouds, fog, haze, or smoke resulting in diminished
+visibility in the inversion layer.
+Surface-based temperature inversions occur on clear, cool nights when the air close to the ground is
+cooled by the lowering temperature of the ground. The air within a few hundred feet of the surface 
+Chapter 3b: Effects of Weather on Small Unmanned Aircraft Performance
+Remote Pilot – Small Unmanned Aircraft Systems Study Guide 25
+becomes cooler than the air above it. Frontal inversions occur when warm air spreads over a layer of
+cooler air, or cooler air is forced under a layer of warmer air.
+Temperature/Dew Point Relationship
+The relationship between dew point and temperature defines the concept of relative humidity. The
+dew point, given in degrees, is the temperature at which the air can hold no more moisture. When the
+temperature of the air is reduced to the dew point, the air is completely saturated and moisture begins
+to condense out of the air in the form of fog, dew, frost, clouds, rain, or snow.
+Methods by Which Air Reaches the Saturation Point
+If air reaches the saturation point while temperature and dew point are close together, it is highly
+likely that fog, low clouds, and precipitation will form. There are four methods by which air can
+reach the saturation point. First, when warm air moves over a cold surface, the air temperature
+drops and reaches the saturation point. Second, the saturation point may be reached when cold air
+and warm air mix. Third, when air cools at night through contact with the cooler ground, air reaches
+its saturation point. The fourth method occurs when air is lifted or is forced upward in the
+atmosphere.
+Dew and Frost
+On cool, clear, calm nights, the temperature of the ground and objects on the surface can cause
+temperatures of the surrounding air to drop below the dew point. When this occurs, the moisture in
+the air condenses and deposits itself on the ground, buildings, and other objects like cars and
+aircraft. This moisture is known as dew and sometimes can be seen on grass and other objects in the
+morning. If the temperature is below freezing, the moisture is deposited in the form of frost. While
+dew poses no threat to a small UA, frost poses a definite flight safety hazard. Frost disrupts the flow
+of air over the wing and can drastically reduce the production of lift. It also increases drag, which
+when combined with lowered lift production, can adversely affect the ability to take off. A small UA
+must be thoroughly cleaned and free of frost prior to beginning a flight.
+Clouds
+To pilots, the cumulonimbus cloud is perhaps the most dangerous cloud type. It appears individually or
+in groups and is known as either an air mass or orographic thunderstorm. Heating of the air near the
+Earth’s surface creates an air mass thunderstorm; the upslope motion of air in the mountainous
+regions causes orographic thunderstorms. Cumulonimbus clouds that form in a continuous line are
+nonfrontal bands of thunderstorms or squall lines.
+Since rising air currents cause cumulonimbus clouds, they are extremely turbulent and pose a
+significant hazard to flight safety. For example, if a small UA enters a thunderstorm, the small UA could
+experience updrafts and downdrafts that exceed 3,000 fpm. In addition, thunderstorms can produce
+large hailstones, damaging lightning, tornadoes, and large quantities of water, all of which are
+potentially hazardous to an aircraft.
+Standing Lenticular Altocumulus Clouds.
+Standing lenticular altocumulus clouds are formed on the crests of waves created by barriers in the
+wind flow. The clouds show little movement, hence the name standing. Wind, however, can be
+quite strong blowing through such clouds. They are characterized by their smooth, polished edges.
+The presence of these clouds is a good indication of very strong turbulence and should be avoided.
+Chapter 3b: Effects of Weather on Small Unmanned Aircraft Performance
+Remote Pilot – Small Unmanned Aircraft Systems Study Guide 26
+Stability
+Stability of an air mass determines its typical weather characteristics. When one type of air mass
+overlies another, conditions change with height. Characteristics typical of an unstable and a stable
+air mass are as follows:
+Unstable Air Stable Air
+Cumuliform clouds Stratiform clouds and fog
+Showery precipitation Continuous precipitation
+Rough air (turbulence) Smooth air
+Good visibility (except in blowing obstructions) Fair to poor visibility in haze and smoke
+Fronts
+As air masses move out of their source regions, they come in contact with other air masses of different
+properties. The zone between two different air masses is a frontal zone or front. Across this zone,
+temperature, humidity and wind often change rapidly over short distances.
+Mountain Flying
+When planning a flight over mountainous terrain, gather as much preflight information as possible on
+cloud reports, wind direction, wind speed, and stability of air. Satellites often help locate mountain
+waves. Adequate information may not always be available, so remain alert for signposts in the sky.
+Wind at mountain top level in excess of 25 knots suggests some turbulence. Wind in excess of 40 knots
+across a mountain barrier dictates caution. Stratified clouds mean stable air. Standing lenticular and/or
+rotor clouds suggest a mountain wave; expect turbulence many miles to the lee of mountains and
+relative smooth flight on the windward side. Convective clouds on the windward side of mountains
+mean unstable air; expect turbulence in close proximity to and on either side of the mountain.
+Structural Icing
+Two conditions are necessary for structural icing in flight:
+1. The aircraft must be flying through visible water such as rain or cloud droplets
+2. The temperature at the point where the moisture strikes the aircraft must be 0° C or colder.
+Aerodynamic cooling can lower temperature of an airfoil to 0° C even though the ambient temperature
+is a few degrees warmer.
+Thunderstorm Life Cycle
+A thunderstorm cell during its life cycle progresses through three stages-( 1) the cumulus, (2) the
+mature, and (3) the dissipating. It is virtually impossible to visually detect the transition from one stage
+to another; the transition is subtle and by no means abrupt. Furthermore, a thunderstorm may be a
+cluster of cells in different stages of the lifecycle.
+The Cumulus Stage
+Although most cumulus clouds do not grow into thunderstorms, every thunderstorm begins as a
+cumulus. The key feature of the cumulus stage is an updraft as illustrated in figure 3-4. The updraft
+varies in strength and extends from very near the surface to the cloud top. Growth rate of the cloud 
+Chapter 3b: Effects of Weather on Small Unmanned Aircraft Performance
+Remote Pilot – Small Unmanned Aircraft Systems Study Guide 27
+may exceed 3,000 feet per minute, so it is inadvisable to operate a small UA in an area of rapidly
+building cumulus clouds. Early during the cumulus stage, water droplets are quite small but grow to
+raindrop size as the cloud grows. The upwelling air carries the liquid water above the freezing level
+creating an icing hazard. As the raindrops grow still heavier, they fall. The cold rain drags air with it
+creating a cold downdraft coexisting with the updraft; the cell has reached the mature stage.
+The Mature Stage
+Precipitation beginning to fall from the cloud base is your signal that a downdraft has developed and
+a cell has entered the mature stage. Cold rain in the downdraft retards compressional heating, and
+the downdraft remains cooler than surrounding air. Therefore, its downward speed is accelerated
+and may exceed 2,500 feet per minute. The down rushing air spreads outward at the surface as
+shown in figure 3-4 producing strong, gusty surface winds, a sharp temperature drop, and a rapid
+rise in pressure. The surface wind surge is a "plow wind" and its leading edge is the "first gust."
+Meanwhile, updrafts reach a maximum with speeds possibly exceeding 6,000 feet per minute.
+Updrafts and downdrafts in close proximity create strong vertical shear and a very turbulent
+environment. All thunderstorm hazards reach their greatest intensity during the mature stage.
+The Dissipating Stage
+Downdrafts characterize the dissipating stage of the thunderstorm cell as shown in figure 3-4 and
+the storm dies rapidly. When rain has ended and downdrafts have abated, the dissipating stage 'is
+complete. When all cells of the thunderstorm have completed this stage, only harmless cloud
+remnants remain.
+Figure 3-4. Life cycle of a thunderstorm.
+Chapter 3b: Effects of Weather on Small Unmanned Aircraft Performance
+Remote Pilot – Small Unmanned Aircraft Systems Study Guide 28
+Ceiling
+For aviation purposes, a ceiling is the lowest layer of clouds reported as being broken or overcast, or
+the vertical visibility into an obscuration like fog or haze. Clouds are reported as broken when fiveeighths to seven-eighths of the sky is covered with clouds. Overcast means the entire sky is covered
+with clouds. Current ceiling information is reported by the aviation routine weather report (METAR)
+and automated weather stations of various types.
+Visibility
+Closely related to cloud cover and reported ceilings is visibility information. Visibility refers to the
+greatest horizontal distance at which prominent objects can be viewed with the naked eye. Current
+visibility is also reported in METAR and other aviation weather reports, as well as by automated
+weather systems. Visibility information, as predicted by meteorologists, is available for a pilot during a
+preflight weather briefing. 

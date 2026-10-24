@@ -3,10 +3,9 @@ import { Bot, Send, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import AppShell from '../components/AppShell';
 import ChatBubble from '../components/ChatBubble';
+import { streamSkye } from '../services/skyeStream';
 import type { ChatMessage } from '../types';
 import styles from './ChatPage.module.css';
-
-const API_BASE = import.meta.env.VITE_API_BASE ?? 'http://localhost:8000';
 
 interface RulesResponse {
   answer_markdown: string;
@@ -42,48 +41,62 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<ChatMessage[]>([GREETING]);
   const [inputValue, setInputValue] = useState('');
   const [isThinking, setIsThinking] = useState(false);
+  const [statusText, setStatusText] = useState<string | null>(null);
   const [sessionId] = useState(() => `chat-${Date.now()}`);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const abortRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isThinking]);
 
+  useEffect(() => () => abortRef.current?.abort(), []);
+
   async function sendMessage(text: string) {
     const trimmed = text.trim();
     if (!trimmed || isThinking) return;
 
-    const userMsg: ChatMessage = { role: 'user', text: trimmed };
-    setMessages((prev) => [...prev, userMsg]);
+    // The empty Skye message is filled in token by token as the answer streams.
+    setMessages((prev) => [...prev, { role: 'user', text: trimmed }, { role: 'skye', text: '' }]);
     setInputValue('');
     setIsThinking(true);
+    setStatusText(null);
+
+    const setReply = (reply: string) =>
+      setMessages((prev) => [...prev.slice(0, -1), { role: 'skye', text: reply }]);
+
+    const controller = new AbortController();
+    abortRef.current = controller;
+    let raw = '';
 
     try {
       const params = new URLSearchParams({ query: trimmed, session_id: sessionId });
-      const res = await fetch(`${API_BASE}/rules?${params}`);
-      if (!res.ok) {
-        const detail = await res.text().catch(() => `HTTP ${res.status}`);
-        throw new Error(`API error ${res.status}: ${detail}`);
-      }
-      const data: RulesResponse = await res.json();
-      const plain = stripMarkdown(data.answer_markdown);
-      const skyeMsg: ChatMessage = {
-        role: 'skye',
-        text: plain + (data.mock_data ? '\n\n⚠ Demo rules corpus was used.' : ''),
-      };
-      setMessages((prev) => [...prev, skyeMsg]);
+      await streamSkye<RulesResponse>('/rules/stream', params, {
+        onStatus: setStatusText,
+        onTool: (tool) =>
+          setStatusText(tool.state === 'running' ? `Searching ${tool.label}…` : 'Writing an answer…'),
+        onReset: () => { raw = ''; setReply(''); },
+        onToken: (chunk) => { raw += chunk; setReply(stripMarkdown(raw)); },
+        onDone: (data) =>
+          setReply(
+            stripMarkdown(data.answer_markdown) +
+              (data.mock_data ? '\n\n⚠ Simulated or demo data was used.' : ''),
+          ),
+      }, controller.signal);
     } catch (err) {
-      const errMsg: ChatMessage = {
-        role: 'skye',
-        text:
-          `Could not reach the Skye API (${String(err)}). ` +
+      if (controller.signal.aborted) return;
+      setReply(
+        `Could not reach the Skye API (${String(err)}). ` +
           'Make sure the backend is running: make run',
-      };
-      setMessages((prev) => [...prev, errMsg]);
+      );
     } finally {
       setIsThinking(false);
+      setStatusText(null);
     }
   }
+
+  const lastMessage = messages[messages.length - 1];
+  const awaitingFirstToken = isThinking && lastMessage.role === 'skye' && lastMessage.text === '';
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -125,17 +138,20 @@ export default function ChatPage() {
 
         {/* ── Message list ── */}
         <div className={styles.messageList}>
-          {messages.map((msg, i) => (
-            <ChatBubble key={i} message={msg} />
-          ))}
+          {messages.map((msg, i) => {
+            const isLast = i === messages.length - 1;
+            if (isLast && awaitingFirstToken) return null;
+            return <ChatBubble key={i} message={msg} streaming={isLast && isThinking} />;
+          })}
 
-          {isThinking && (
+          {awaitingFirstToken && (
             <div className={styles.thinkingRow}>
               <div className={styles.thinkingBubble}>
                 <span className={styles.dot} />
                 <span className={styles.dot} />
                 <span className={styles.dot} />
               </div>
+              {statusText && <span className={styles.statusText}>{statusText}</span>}
             </div>
           )}
           <div ref={bottomRef} />

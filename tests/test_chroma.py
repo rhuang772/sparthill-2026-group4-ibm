@@ -1,98 +1,130 @@
 """
-tests/test_chroma.py — offline tests for the Chroma rules store.
+tests/test_chroma.py — study guide corpus parsing and the Chroma rules store.
+
+The store is built in a temporary directory so the real .chroma/ is untouched.
+Embeddings use Chroma's default local model (no network once it is cached).
 """
 import re
 
 import pytest
 
-from app.rules.chroma_dummy import DummyRulesStore
+from app.config import settings
+from app.rules import chroma_store
+from app.rules.chroma_store import StudyGuideStore
+from app.rules.study_guide import MAX_CHARS, SECTIONS, SOURCE_URL, corpus_fingerprint, load_chunks
 from app.tools.chroma_tool import search_rules
 
 
 @pytest.fixture(scope="module")
-def store():
-    s = DummyRulesStore()
+def chunks():
+    return load_chunks(settings.RULES_CORPUS_DIR)
+
+
+@pytest.fixture(scope="module")
+def store(tmp_path_factory):
+    s = StudyGuideStore(path=str(tmp_path_factory.mktemp("chroma")), collection="test_study_guide")
     s.ensure_seeded()
     return s
 
 
-def test_collection_has_10_docs(store):
-    assert store._col.count() == 10
+# ---------------------------------------------------------------------------
+# Parsing
+# ---------------------------------------------------------------------------
 
-
-def test_all_expected_rule_ids_present(store):
+def test_every_section_with_text_produces_chunks(chunks):
+    found = {(c["metadata"]["chapter"], c["metadata"]["section"]) for c in chunks}
     expected = {
-        "controlled-airspace-auth",
-        "facility-map-ceiling",
-        "altitude-400",
-        "authorization-not-override",
-        "prohibited-restricted",
-        "nsufr-99-7",
-        "weather-minimums",
-        "yield-to-aircraft",
-        "part-108-pending",
-        "section-2209-pending",
+        (name.removeprefix("chapter").removesuffix(".txt"), heading.rstrip("."))
+        for name, sections in SECTIONS.items() for heading, _ in sections
     }
-    results = store.query("drone rules", tags=[], k=10)
-    found_ids = {r["rule_id"] for r in results}
-    assert expected == found_ids
+    # "Uncontrolled Airspace" is a heading directly followed by "Class G Airspace"
+    assert expected - found == {("2", "Uncontrolled Airspace")}
 
 
-def test_tag_filtered_retrieval_laanc(store):
-    results = store.query("controlled airspace authorization", tags=["laanc"], k=4)
-    ids = [r["rule_id"] for r in results]
-    assert "controlled-airspace-auth" in ids
+def test_rule_ids_unique(chunks):
+    ids = [c["rule_id"] for c in chunks]
+    assert len(ids) == len(set(ids))
 
 
-def test_tag_filtered_retrieval_tfr(store):
-    results = store.query("temporary flight restriction", tags=["tfr"], k=4)
-    ids = [r["rule_id"] for r in results]
-    assert "authorization-not-override" in ids
+def test_chunks_fit_embedding_window(chunks):
+    for c in chunks:
+        body = c["text"].split("\n", 1)[1]
+        assert 0 < len(body) <= MAX_CHARS, c["rule_id"]
 
 
-def test_tag_filtered_retrieval_altitude(store):
-    results = store.query("altitude limit", tags=["altitude"], k=4)
-    ids = [r["rule_id"] for r in results]
-    assert "altitude-400" in ids
+def test_page_headers_and_captions_removed(chunks):
+    for c in chunks:
+        assert "Systems Study Guide" not in c["text"], c["rule_id"]
+        assert not re.search(r"^Figure \d+-\d+\.", c["text"], re.M), c["rule_id"]
+        assert "[Figure" not in c["text"], c["rule_id"]
 
 
-def test_tag_filtered_retrieval_nsufr(store):
-    results = store.query("national security restriction", tags=["nsufr"], k=4)
-    ids = [r["rule_id"] for r in results]
-    assert "nsufr-99-7" in ids
+def test_citation_and_pages(chunks):
+    by_id = {c["rule_id"]: c for c in chunks}
+    class_b = by_id["sg-2-class-b-airspace-1"]
+    assert "authorization from ATC" in class_b["text"]
+    assert class_b["metadata"]["page_start"] == 5
+    assert "Chapter 2" in class_b["metadata"]["citation"]
+    assert class_b["metadata"]["source_url"] == SOURCE_URL
+    assert class_b["metadata"]["dummy"] is False
+    assert by_id["sg-3b-visibility-1"]["metadata"]["page_end"] == 28
 
 
-def test_no_coordinates_in_documents(store):
-    """Embedded rule texts must never contain lat/lon coordinate patterns."""
-    results = store.query("authorization requirements", tags=[], k=10)
-    coord_pattern = re.compile(r"\b\d{1,3}\.\d{4,}\b")  # e.g. 37.6213
-    for chunk in results:
-        text = chunk["text"]
-        assert not coord_pattern.search(text), (
-            f"Rule '{chunk['rule_id']}' contains what looks like a coordinate: "
-            f"{coord_pattern.search(text).group()}"
-        )
+def test_fingerprint_changes_with_text(chunks):
+    edited = [dict(chunks[0], text=chunks[0]["text"] + " edited")] + chunks[1:]
+    assert corpus_fingerprint(edited) != corpus_fingerprint(chunks)
 
 
-def test_dummy_flag_set(store):
-    results = store.query("airspace", tags=[], k=10)
-    for chunk in results:
-        assert chunk["metadata"]["dummy"] is True
+# ---------------------------------------------------------------------------
+# Store
+# ---------------------------------------------------------------------------
+
+def test_store_holds_every_chunk(store, chunks):
+    assert store.count() == len(chunks)
 
 
-def test_search_rules_tool_wrapper(store):
-    """The chroma_tool wrapper returns results in the same format."""
-    results = search_rules("weather visibility minimums", tags=["weather"], k=2)
-    assert isinstance(results, list)
-    assert len(results) >= 1
-    assert results[0]["rule_id"] == "weather-minimums"
+def test_ensure_seeded_is_idempotent(store, chunks):
+    store.ensure_seeded()
+    assert store.count() == len(chunks)
 
 
-def test_empty_query_returns_results(store):
-    results = store.query("drone", k=4)
-    assert len(results) >= 1
+@pytest.mark.parametrize("query, tags, expected_section", [
+    ("authorization to fly near the busiest airports", ["laanc"], "Class B Airspace"),
+    ("do I need ATC authorization in uncontrolled airspace", ["uncontrolled_airspace"], "Class G Airspace"),
+    ("what is class G airspace", [], "Class G Airspace"),
+    ("temporary flight restriction purposes", ["tfr"], "Temporary Flight Restrictions (TFR)"),
+    ("sudden change in wind speed and direction near the ground", ["wind"], "Low-Level Wind Shear"),
+    ("frost on the drone before takeoff", [], "Dew and Frost"),
+    ("how to read a METAR wind group", ["metar"], "Aviation Routine Weather Report (METAR)"),
+])
+def test_retrieval_finds_expected_section(store, query, tags, expected_section):
+    results = store.query(query, tags=tags, k=4)
+    assert expected_section in [r["metadata"]["section"] for r in results]
+
+
+def test_tag_filter_only_returns_tagged_chunks(store):
+    results = store.query("restrictions", tags=["thunderstorm"], k=10)
+    assert results
+    assert all("thunderstorm" in r["metadata"]["tags"] for r in results)
+
+
+def test_unknown_tag_falls_back_to_unfiltered(store):
+    assert len(store.query("airspace classes", tags=["no_such_tag"], k=3)) == 3
 
 
 def test_k_cap(store):
-    results = store.query("rules", k=3)
-    assert len(results) <= 3
+    assert len(store.query("weather", k=3)) == 3
+
+
+def test_no_coordinates_in_documents(store):
+    coord = re.compile(r"\b\d{1,3}\.\d{4,}\b")  # e.g. 37.6213
+    for chunk in store.query("airspace", k=store.count()):
+        assert not coord.search(chunk["text"]), chunk["rule_id"]
+
+
+def test_search_rules_tool_wrapper(store, monkeypatch):
+    monkeypatch.setattr(chroma_store, "_store", store)
+    results = search_rules("visibility and ceiling", tags=["visibility"], k=20)
+    assert 1 <= len(results) <= 10
+    assert {"rule_id", "text", "metadata", "distance"} <= set(results[0])
+    assert results[0]["metadata"]["citation"]

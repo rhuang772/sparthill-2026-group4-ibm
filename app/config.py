@@ -15,6 +15,10 @@ class Settings(BaseSettings):
     OPENAI_API_KEY: str = ""
     OPENAI_MODEL: str = "gpt-4o"
 
+    # Answer reviewer (LLM-as-judge run on every answer; see app/judge.py)
+    ENABLE_ANSWER_REVIEW: bool = True
+    REVIEW_MODEL: str = ""           # empty → OPENAI_MODEL
+
     # AirHub / simulator
     USE_SIM: bool = True
     AIRHUB_API_KEY: str = "sim-api-key"
@@ -22,8 +26,10 @@ class Settings(BaseSettings):
     AIRHUB_CLIENT_SECRET: str = "sim-client-secret"
     AIRHUB_BASE_URL: str = "https://airhub-api-sandbox.airspacelink.com"
 
+    # Geoapify Places (population exposure); population check reports "failed" without it
+    GEOAPIFY_API_KEY: str = ""
+
     # Feature flags for live data sources
-    USE_LIVE_TFR: bool = False
     USE_LIVE_NSUFR: bool = False
     USE_LIVE_FAA: bool = False       # true → query FAA ArcGIS for facility-map ceiling
     USE_LIVE_WEATHER: bool = True    # true → query Open-Meteo (free, no key required)
@@ -36,8 +42,8 @@ class Settings(BaseSettings):
     UASFM_SAMPLE_PATH: Path = FIXTURES_DIR / "uasfm_sample.geojson"
     MOCK_OSM_PATH: Path = BASE_DIR / "data" / "mock_osm.geojson"
     CHROMA_PATH: str = ".chroma"
-    CHROMA_COLLECTION: str = "faa_rules_dummy"
-    SEED_RULES_PATH: Path = BASE_DIR / "app" / "rules" / "seed_rules.json"
+    CHROMA_COLLECTION: str = "faa_remote_pilot_study_guide"
+    RULES_CORPUS_DIR: Path = BASE_DIR / "app" / "rules" / "corpus"
 
 
 # ---------------------------------------------------------------------------

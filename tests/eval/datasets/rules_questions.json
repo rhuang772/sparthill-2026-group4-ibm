@@ -1,0 +1,265 @@
+[
+  {
+    "id": "q01_class_b",
+    "question": "What do I need before flying my drone in Class B airspace?",
+    "reference_ids": ["sg-2-class-b-airspace-1"],
+    "key_facts": [
+      "Class B generally extends from the surface to 10,000 feet MSL around the busiest airports",
+      "A remote pilot must receive ATC authorization before operating in Class B airspace"
+    ]
+  },
+  {
+    "id": "q02_class_c",
+    "question": "How big is Class C airspace, and do I need permission to fly a drone there?",
+    "reference_ids": ["sg-2-class-c-airspace-1"],
+    "key_facts": [
+      "Class C generally extends from the surface to 4,000 feet above the airport elevation",
+      "It usually has a surface area with a 5 nautical mile radius and an outer circle with a 10 NM radius from 1,200 to 4,000 feet above the airport",
+      "A remote pilot must receive authorization before operating in Class C airspace"
+    ]
+  },
+  {
+    "id": "q03_class_d",
+    "question": "What is Class D airspace, and can I fly my drone in it without asking anyone?",
+    "reference_ids": ["sg-2-class-d-airspace-1"],
+    "key_facts": [
+      "Class D generally extends from the surface to 2,500 feet above the airport elevation",
+      "Class D surrounds airports that have an operational control tower",
+      "A remote pilot must receive ATC authorization before operating in Class D airspace"
+    ]
+  },
+  {
+    "id": "q04_class_e",
+    "question": "Do I usually need air traffic control authorization to fly in Class E airspace?",
+    "reference_ids": ["sg-2-class-e-airspace-1", "sg-2-class-e-airspace-2", "sg-2-class-e-airspace-3"],
+    "key_facts": [
+      "Class E is the controlled airspace not classified as Class A, B, C, or D",
+      "In most cases a remote pilot will not need ATC authorization to operate in Class E airspace",
+      "The Class E base is often 1,200 feet AGL, but in many areas it is the surface or 700 feet AGL"
+    ]
+  },
+  {
+    "id": "q05_class_g",
+    "question": "What is Class G airspace, and do I need permission from air traffic control to fly there?",
+    "reference_ids": ["sg-2-class-g-airspace-1"],
+    "key_facts": [
+      "Class G is uncontrolled airspace that has not been designated Class A, B, C, D, or E",
+      "Class G extends from the surface to the base of the overlying Class E airspace",
+      "A remote pilot does not need ATC authorization to operate in Class G airspace"
+    ]
+  },
+  {
+    "id": "q06_prohibited_area",
+    "question": "What is a prohibited area, and what are some examples?",
+    "reference_ids": ["sg-2-prohibited-areas-1"],
+    "key_facts": [
+      "Flight of aircraft is prohibited within a prohibited area",
+      "Prohibited areas are established for security or other reasons associated with the national welfare",
+      "They are charted as a P followed by a number, such as P-40",
+      "Examples include Camp David and the National Mall in Washington, D.C."
+    ]
+  },
+  {
+    "id": "q07_restricted_area",
+    "question": "What does a restricted area on an aviation chart mean, and why shouldn't I fly into one without authorization?",
+    "reference_ids": ["sg-2-restricted-areas-1", "sg-2-restricted-areas-2"],
+    "key_facts": [
+      "Flight in restricted areas is not wholly prohibited but is subject to restrictions",
+      "They contain unusual, often invisible hazards such as artillery firing, aerial gunnery, or guided missiles",
+      "Entering without authorization from the using or controlling agency may be extremely hazardous",
+      "They are charted as an R followed by a number, such as R-4401"
+    ]
+  },
+  {
+    "id": "q08_warning_area",
+    "question": "What is a warning area, and how is it different from a restricted area?",
+    "reference_ids": ["sg-2-warning-areas-1"],
+    "key_facts": [
+      "Warning areas are similar to restricted areas, but the US government does not have sole jurisdiction over the airspace",
+      "A warning area extends from 3 nautical miles outward from the US coast",
+      "It contains activity that may be hazardous to nonparticipating aircraft",
+      "Warning areas are designated with a W followed by a number, such as W-237"
+    ]
+  },
+  {
+    "id": "q09_moa",
+    "question": "What is a Military Operation Area (MOA), and where can I find out when it's in use?",
+    "reference_ids": ["sg-2-military-operation-areas-moas-1"],
+    "key_facts": [
+      "MOAs separate certain military training activities from IFR traffic",
+      "MOAs are not numbered; they are named, such as Camden Ridge MOA",
+      "The back of the sectional chart lists the MOA's times of operation, altitudes affected, and controlling agency"
+    ]
+  },
+  {
+    "id": "q10_alert_area",
+    "question": "What is an alert area on an aviation chart, and what should I do if I'm flying in one?",
+    "reference_ids": ["sg-2-alert-areas-1"],
+    "key_facts": [
+      "Alert areas are charted with an A followed by a number, such as A-211",
+      "They may contain a high volume of pilot training or an unusual type of aerial activity",
+      "Pilots should exercise caution in alert areas",
+      "All pilots, participating or transiting, are equally responsible for collision avoidance"
+    ]
+  },
+  {
+    "id": "q11_tfr_notam_contents",
+    "question": "How is a Temporary Flight Restriction announced, and what information does the notice include?",
+    "reference_ids": ["sg-2-temporary-flight-restrictions-tfr-1"],
+    "key_facts": [
+      "A TFR is designated by a flight data center (FDC) NOTAM",
+      "The NOTAM begins with the phrase FLIGHT RESTRICTIONS",
+      "It gives the location, effective time period, area in statute miles, and altitudes affected",
+      "Pilots should check NOTAMs as part of flight planning"
+    ]
+  },
+  {
+    "id": "q12_tfr_purposes",
+    "question": "Why does the FAA set up TFRs, and how can I check whether one affects my flight?",
+    "reference_ids": ["sg-2-temporary-flight-restrictions-tfr-1", "sg-2-temporary-flight-restrictions-tfr-2"],
+    "key_facts": [
+      "TFRs protect persons and property in the air or on the surface from an existing or imminent hazard",
+      "TFRs provide a safe environment for disaster relief aircraft",
+      "TFRs protect the President, Vice President, or other public figures",
+      "It is the pilot's responsibility to be aware of TFRs in the proposed area of flight",
+      "One way to check is the FAA website tfr.faa.gov"
+    ]
+  },
+  {
+    "id": "q13_national_security_area",
+    "question": "What is a National Security Area, and am I allowed to fly my drone through one?",
+    "reference_ids": ["sg-2-national-security-areas-nsas-1"],
+    "key_facts": [
+      "NSAs are established where there is a requirement for increased security and safety of ground facilities",
+      "Flight in NSAs may be temporarily prohibited by regulation under 14 CFR part 99, with prohibitions disseminated via NOTAM",
+      "Pilots are requested to voluntarily avoid flying through NSAs"
+    ]
+  },
+  {
+    "id": "q14_notam",
+    "question": "What is a NOTAM, and what kinds of things are NOTAMs issued for?",
+    "reference_ids": ["sg-2-notices-to-airmen-notams-1", "sg-2-notices-to-airmen-notams-2"],
+    "key_facts": [
+      "NOTAMs are time-critical aeronautical information that is temporary or not known far enough in advance to be published on charts",
+      "NOTAMs are issued for hazards such as air shows, parachute jumps, kite flying, and rocket launches",
+      "NOTAMs are issued for flights by important people such as heads of state",
+      "NOTAMs are issued for inoperable lights on tall obstructions"
+    ]
+  },
+  {
+    "id": "q15_military_training_routes",
+    "question": "What are Military Training Routes, and what's the difference between IR and VR routes?",
+    "reference_ids": ["sg-2-military-training-routes-mtrs-1"],
+    "key_facts": [
+      "MTRs are used by military aircraft to maintain proficiency in tactical flying",
+      "They are usually below 10,000 feet MSL for operations at speeds over 250 knots",
+      "IR routes are flown under IFR and VR routes under VFR",
+      "Routes with no segment above 1,500 feet AGL have four-digit numbers; routes with a segment above 1,500 feet AGL have three-digit numbers"
+    ]
+  },
+  {
+    "id": "q16_metar",
+    "question": "What is a METAR weather report, and how often is one issued?",
+    "reference_ids": ["sg-3a-aviation-routine-weather-report-metar-1"],
+    "key_facts": [
+      "A METAR is an observation of current surface weather in a standard international format",
+      "METARs are issued on a regularly scheduled basis",
+      "A special METAR (SPECI) can be issued at any time between routine reports"
+    ]
+  },
+  {
+    "id": "q17_taf",
+    "question": "What is a Terminal Aerodrome Forecast (TAF), and how long is one valid?",
+    "reference_ids": ["sg-3a-terminal-aerodrome-forecasts-taf-1"],
+    "key_facts": [
+      "A TAF covers the five statute mile radius around an airport",
+      "Each TAF is valid for a 24 or 30 hour period",
+      "TAFs are updated four times a day at 0000Z, 0600Z, 1200Z, and 1800Z",
+      "A TAF uses the same descriptors and abbreviations as a METAR"
+    ]
+  },
+  {
+    "id": "q18_convective_sigmet",
+    "question": "When is a Convective SIGMET issued?",
+    "reference_ids": ["sg-3a-convective-significant-meteorological-information-wst-1"],
+    "key_facts": [
+      "Convective SIGMETs are issued for severe thunderstorms with surface winds greater than 50 knots",
+      "They are issued for hail at the surface of 3/4 inch or more in diameter",
+      "They are issued for tornadoes",
+      "They are issued for embedded thunderstorms, lines of thunderstorms, or thunderstorms affecting 40 percent or more of a 3,000 square mile region"
+    ]
+  },
+  {
+    "id": "q19_density_altitude",
+    "question": "What is density altitude, and how does it affect my drone's performance?",
+    "reference_ids": ["sg-3b-density-altitude-1", "sg-3b-density-altitude-2"],
+    "key_facts": [
+      "Density altitude is the altitude in the standard atmosphere corresponding to a particular air density",
+      "High density altitude means thinner air and decreased aircraft performance",
+      "High elevation, low pressure, high temperature, and high humidity cause high density altitude"
+    ]
+  },
+  {
+    "id": "q20_humidity",
+    "question": "Does humidity affect how my drone performs?",
+    "reference_ids": ["sg-3b-effects-of-humidity-moisture-on-density-1", "sg-3b-effects-of-humidity-moisture-on-density-2", "sg-3b-density-altitude-2"],
+    "key_facts": [
+      "Humidity is the amount of water vapor in the air, expressed as a percentage of the maximum the air can hold",
+      "Warm air can hold more water vapor than cold air",
+      "Humidity alone is usually not an essential factor in density altitude and performance, but it does contribute",
+      "High humidity contributes to high density altitude"
+    ]
+  },
+  {
+    "id": "q21_microburst",
+    "question": "What is a microburst, and what happens if my drone flies into one?",
+    "reference_ids": ["sg-3b-low-level-wind-shear-3", "sg-3b-low-level-wind-shear-4"],
+    "key_facts": [
+      "A microburst is the most severe type of low-level wind shear",
+      "A typical microburst is 1-2 miles across, about 1,000 feet deep, and lasts about 5-15 minutes",
+      "Microbursts can produce downdrafts of up to 6,000 feet per minute",
+      "A drone may first get a headwind, then a downdraft, then a rapidly increasing tailwind, which can cause terrain impact"
+    ]
+  },
+  {
+    "id": "q22_obstructions_wind",
+    "question": "Why is the wind near buildings and hills tricky for flying a drone?",
+    "reference_ids": ["sg-3b-effect-of-obstructions-on-wind-1", "sg-3b-effect-of-obstructions-on-wind-2"],
+    "key_facts": [
+      "Ground obstructions break up the wind flow and create gusts that change rapidly in direction and speed",
+      "Obstructions range from man-made structures like hangars to natural ones like mountains, bluffs, or canyons",
+      "The intensity of the turbulence depends on the size of the obstacle and the wind speed"
+    ]
+  },
+  {
+    "id": "q23_structural_icing",
+    "question": "What conditions cause ice to build up on an aircraft in flight?",
+    "reference_ids": ["sg-3b-structural-icing-1"],
+    "key_facts": [
+      "The aircraft must be flying through visible water such as rain or cloud droplets",
+      "The temperature where the moisture strikes the aircraft must be 0 degrees C or colder",
+      "Aerodynamic cooling can lower an airfoil's temperature to 0 degrees C even when the air is a few degrees warmer"
+    ]
+  },
+  {
+    "id": "q24_thunderstorm_mature_stage",
+    "question": "At what stage is a thunderstorm most dangerous, and what signals that it has reached that stage?",
+    "reference_ids": ["sg-3b-the-mature-stage-1", "sg-3b-the-mature-stage-2"],
+    "key_facts": [
+      "Precipitation beginning to fall from the cloud base signals a downdraft and the mature stage",
+      "Downdrafts may exceed 2,500 feet per minute and produce strong gusty surface winds, a sharp temperature drop, and a rapid pressure rise",
+      "All thunderstorm hazards reach their greatest intensity during the mature stage"
+    ]
+  },
+  {
+    "id": "q25_ceiling_visibility",
+    "question": "What do 'ceiling' and 'visibility' mean in an aviation weather report?",
+    "reference_ids": ["sg-3b-ceiling-1", "sg-3b-visibility-1"],
+    "key_facts": [
+      "A ceiling is the lowest layer of clouds reported as broken or overcast, or the vertical visibility into an obscuration",
+      "Broken means five-eighths to seven-eighths of the sky is covered; overcast means the entire sky is covered",
+      "Visibility is the greatest horizontal distance at which prominent objects can be seen with the naked eye",
+      "Ceiling and visibility are reported in METARs"
+    ]
+  }
+]
