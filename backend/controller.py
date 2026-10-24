@@ -1,11 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from datetime import datetime, timedelta, timezone
 
-from models import Weather, WeatherForecast, HeightLimit, TfrResult, WaterResult
+from models import Weather, WeatherForecast, HeightLimit, TfrResult, WaterResult, PopulationResult
 from service.water_service import WaterService, WaterUnavailable
 from service.weather_service import WeatherService, WeatherUnavailable
 from service.faa_service import FaaService, FaaUnavailable
 from service.tfr_service import TfrService
+from service.population_service import PopulationService, PopulationUnavailable
 
 #--------------- Weather API ----------------
 
@@ -153,3 +154,29 @@ async def get_water_raw(
         raise HTTPException(status_code=502, detail=str(e))
     return {"remark": data.get("remark"), "count": len(data.get("elements", [])),
             "sample": data.get("elements", [])[:3]}
+    
+
+# --------------- Population Exposure API ----------------
+
+population_router = APIRouter(prefix="/api/population-risk", tags=["population"])
+
+
+def get_population_service(request: Request) -> PopulationService:
+    return PopulationService(request.app.state.http_client)
+
+
+@population_router.get("", response_model=PopulationResult)
+async def get_population_risk(
+    lat: float = Query(..., ge=-90, le=90),
+    lon: float = Query(..., ge=-180, le=180),
+    radius_m: float = Query(250, gt=0, le=5000),
+    service: PopulationService = Depends(get_population_service),
+):
+    try:
+        return await service.get_population_risk(lat, lon, radius_m)
+    except PopulationUnavailable as exc:
+       
+        raise HTTPException(
+            status_code=502,
+            detail="Geoapify population-context service unavailable",
+        ) from exc
