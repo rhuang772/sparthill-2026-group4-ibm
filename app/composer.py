@@ -19,7 +19,7 @@ from typing import Any, Optional
 from openai import OpenAI
 
 from app.config import settings
-from app.providers import airspace, faa_facility_map, mock_osm, nsufr, tfr
+from app.providers import airspace, faa_airspace, mock_osm, nsufr, tfr, weather as weather_provider
 from app.providers.base import BaseResult
 from app.repetition import check_and_update, make_fact_hash, record_answer
 from app.tools.chroma_tool import SEARCH_RULES_SCHEMA, search_rules
@@ -46,29 +46,10 @@ _GET_AIRSPACE_SCHEMA: dict[str, Any] = {
     "function": {
         "name": "get_airspace",
         "description": (
-            "Look up the airspace class, controlled-airspace flag, facility name, "
-            "and sim facility-map ceiling at a given lat/lon. Call this first for "
-            "any location check."
-        ),
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "lat": {"type": "number", "description": "Latitude in decimal degrees"},
-                "lon": {"type": "number", "description": "Longitude in decimal degrees"},
-            },
-            "required": ["lat", "lon"],
-        },
-    },
-}
-
-_GET_FACILITY_CEILING_SCHEMA: dict[str, Any] = {
-    "type": "function",
-    "function": {
-        "name": "get_facility_ceiling",
-        "description": (
-            "Look up the FAA UAS Facility Map ceiling (feet AGL) for a given lat/lon. "
-            "A hit means the point is inside a LAANC-eligible grid cell. "
-            "A miss does NOT mean Class G — get_airspace must still be called. "
+            "Look up the FAA airspace class at the surface for a given lat/lon, combining "
+            "FAA Class Airspace boundaries (class at the ground, overlying layers) with the "
+            "FAA UAS Facility Map (LAANC ceiling in feet AGL near airports). "
+            "airspace_class is the single answer; null means it could not be confirmed. "
             "Ceiling 0 means no routine authorization in that cell."
         ),
         "parameters": {
@@ -177,13 +158,22 @@ _FIND_PLACES_SCHEMA: dict[str, Any] = {
     },
 }
 
-# All location tools + rules tool
+# All location tools + rules tool (pre-run tools kept here so the agent CAN still call
+# them if it chooses, but the context prompt instructs it not to for coordinates checks)
 _ALL_LOCATION_TOOLS = [
     _GET_AIRSPACE_SCHEMA,
-    _GET_FACILITY_CEILING_SCHEMA,
     _GET_ADVISORIES_SCHEMA,
     _GET_NSUFR_SCHEMA,
     _GET_TFRS_SCHEMA,
+    _FIND_PLACES_SCHEMA,
+    SEARCH_RULES_SCHEMA,
+]
+
+# Tools available to the agent during a location check.
+# Pre-run tools (airspace, facility ceiling, advisories, NSUFR, TFRs, weather) are
+# deliberately excluded so the agent reasons from pre-gathered data rather than
+# re-calling them.  find_places and search_rules are kept for the agent to use freely.
+_LOCATION_AGENT_TOOLS = [
     _FIND_PLACES_SCHEMA,
     SEARCH_RULES_SCHEMA,
 ]
@@ -199,9 +189,7 @@ _RULES_ONLY_TOOLS = [SEARCH_RULES_SCHEMA]
 def _dispatch_tool(name: str, args: dict[str, Any]) -> Any:
     """Call the Python function matching the OpenAI function name."""
     if name == "get_airspace":
-        return airspace.get_airspace(args["lat"], args["lon"])
-    if name == "get_facility_ceiling":
-        return faa_facility_map.get_facility_ceiling(args["lat"], args["lon"])
+        return faa_airspace.get_airspace(args["lat"], args["lon"])
     if name == "get_advisories":
         return airspace.get_advisories(args["lat"], args["lon"], args.get("radius_km", 5.0))
     if name == "get_nsufr":
@@ -259,7 +247,11 @@ FIXED ANSWER STRUCTURE for flight checks (use these headings):
 
 AGENT JUDGEMENT RULES
 - Lead with the most restrictive thing found. A TFR or NSUFR outranks a ceiling or authorization path.
-- A facility-map HIT means authorization is needed up to the ceiling shown. A MISS does NOT mean Class G or uncontrolled — the airspace class must come from get_airspace.
+- The airspace class comes ONLY from get_airspace.airspace_class. Do not infer it from anything else.
+- If airspace_class is null, say the airspace class could not be confirmed and tell the user to check B4UFLY. Never assume Class G.
+- Class G means uncontrolled at the surface: no LAANC needed below 400 ft AGL. Mention overlying_layers (e.g. Class E from 700 ft) only to explain why the 400 ft limit keeps the user below them.
+- Classes B, C, D and E at the surface are controlled: authorization (LAANC) is needed. If facility_map.in_grid is true, authorization is available up to facility_map.ceiling_ft; ceiling 0 means no routine authorization in that cell.
+- Relay every entry in get_airspace.notes (part-time surface areas, MSL floors, source disagreements).
 - Ceiling 0 means no routine authorization in that cell.
 - Only treat a TFR as active if its effective window includes the flight time.
 - If any tool returned status "failed" or "stale", say plainly: "Could not verify live restrictions from [source name]." Name the source. Absence of results from a failed source is NOT evidence of no restrictions.
@@ -280,18 +272,21 @@ BEGINNER MODE
 
 _LOCATION_CHECK_CONTEXT = """
 USE CASE: LOCATION FLIGHT CHECK
-The user has provided coordinates for a map pin. Your job is to automatically gather all relevant data and produce a structured briefing. Do NOT wait for more user input.
+The user has provided coordinates for a map pin. All core location data (airspace, \
+facility map ceiling, advisories, NSUFR, TFRs, and weather) has ALREADY been gathered \
+and is included below as pre-run tool results. Do NOT call \
+get_airspace, get_advisories, get_nsufr, get_tfrs, or get_weather — that data \
+is already in front of you.
 
-Tool calling order:
-1. Call get_airspace(lat, lon) — always first
-2. Call get_facility_ceiling(lat, lon) — always
-3. Call get_advisories(lat, lon) — always
-4. Call get_nsufr(lat, lon) — always
-5. Call get_tfrs(lat, lon, flight_time) — always
-6. Call search_rules(query, tags) — use tags discovered from the above results (e.g. if controlled airspace found, use tags=["controlled_airspace","laanc"])
-7. Optionally call find_places if the user also asked for nearby suggestions
+Your job is to:
+1. Read the pre-run results carefully.
+2. Call search_rules(query, tags) — choose tags based on what the pre-run data shows \
+   (e.g. if controlled airspace was found, use tags=["controlled_airspace","laanc"]; \
+   if a TFR is present, add "tfr"; if weather is marginal, add "weather").
+3. Optionally call find_places if the user asked for nearby suggestions.
+4. Produce a structured answer using the FIXED ANSWER STRUCTURE.
 
-Then produce a structured answer using the FIXED ANSWER STRUCTURE above.
+Do NOT re-call any pre-run tool. Do NOT guess data that is already provided.
 """
 
 _RULES_QUESTION_CONTEXT = """
@@ -475,14 +470,46 @@ def _inject_repetition(system: str, session_id: str, fact_hash: str) -> tuple[st
 from app.schema import CheckResponse, Citation, RulesResponse, ToolCallRecord  # noqa: E402
 
 
-def check_location(
+async def check_location(
     lat: float,
     lon: float,
     session_id: Optional[str] = None,
     flight_time: Optional[dt.datetime] = None,
+    planned_altitude_ft: Optional[int] = None,
+    radius_m: Optional[float] = None,
 ) -> CheckResponse:
-    """Run a location-based flight check."""
+    """Run a location-based flight check.
+
+    Core location providers (airspace, facility ceiling, advisories, NSUFR, TFRs,
+    weather) are called directly in Python BEFORE the agent loop.  Their results are
+    injected into the conversation as pre-run tool messages so the agent reasons from
+    them immediately without spending rounds re-fetching the same data.
+
+    The agent still has access to find_places and search_rules and will call those
+    on its own. get_airspace / get_advisories / get_nsufr /
+    get_tfrs / get_weather are intentionally excluded from _LOCATION_AGENT_TOOLS so
+    the agent is not tempted to re-call them.
+    """
     session_id = session_id or uuid.uuid4().hex
+
+    # ------------------------------------------------------------------
+    # 1.  Pre-run core location tools directly (no LLM round-trip)
+    # ------------------------------------------------------------------
+    ft_str = flight_time.isoformat() if flight_time else None
+
+    pre_run: list[tuple[str, dict, Any]] = [
+        ("get_airspace",        {"lat": lat, "lon": lon},
+         faa_airspace.get_airspace(lat, lon)),
+        ("get_advisories",      {"lat": lat, "lon": lon, "radius_km": 5.0},
+         airspace.get_advisories(lat, lon, 5.0)),
+        ("get_nsufr",           {"lat": lat, "lon": lon},
+         nsufr.get_nsufr(lat, lon)),
+        ("get_tfrs",            {"lat": lat, "lon": lon, **({"flight_time": ft_str} if ft_str else {})},
+         tfr.get_tfrs(lat, lon, flight_time)),
+        ("get_weather",         {"lat": lat, "lon": lon},
+         weather_provider.get_weather(lat, lon)),
+    ]
+
 
     # Build a lightweight fact fingerprint for repeat detection
     fact_key = {"lat": round(lat, 3), "lon": round(lon, 3), "ft": str(flight_time)}
@@ -490,19 +517,81 @@ def check_location(
 
     augmented_system, _is_repeat = _inject_repetition(_SYSTEM_PROMPT + _LOCATION_CHECK_CONTEXT, session_id, fact_hash)
 
-    ft_str = flight_time.isoformat() if flight_time else "not specified"
+    # ------------------------------------------------------------------
+    # 2.  Seed the conversation with pre-run results
+    #     We use synthetic tool_call_id values so OpenAI accepts the
+    #     tool-result messages without a preceding assistant tool_call.
+    #     Each pre-run call is represented as:
+    #       assistant message  (tool_calls=[...])
+    #       tool message       (tool_call_id=..., content=<json>)
+    # ------------------------------------------------------------------
+    alt_str = f"{planned_altitude_ft} ft AGL" if planned_altitude_ft else "not specified"
+    radius_str = f"{radius_m} m" if radius_m else "not specified"
     user_content = (
+        f"given the following pre-run results as shown here: {pre_run}, answer identify if ideal conditions for flying are present."
         f"Please check the drone flying conditions at coordinates: "
         f"latitude {lat}, longitude {lon}. "
-        f"Planned flight time: {ft_str}."
+        f"Planned flight time: {ft_str or 'not specified'}. "
+        f"Planned altitude: {alt_str}. "
+        f"Flight area radius: {radius_str}."
+        f"Please give note of weather conditions, if any restrictions are present, and if any nearby options are available."
     )
 
-    messages = [
+    messages: list[dict] = [
         {"role": "system", "content": augmented_system},
         {"role": "user", "content": user_content},
     ]
 
-    loop_result = _run_loop(messages, _ALL_LOCATION_TOOLS, session_id)
+    # Build a single assistant message that "called" all pre-run tools,
+    # followed by one tool-result message per call.
+    loop_result = _LoopResult()
+    tool_calls_msg: list[dict] = []
+    tool_result_msgs: list[dict] = []
+
+    for fn_name, fn_args, result in pre_run:
+        tc_id = f"prerun_{fn_name}"
+
+        # Record in loop_result (same bookkeeping as _run_loop)
+        checked_at = None
+        status = "ok"
+        if isinstance(result, BaseResult):
+            checked_at = result.checked_at.isoformat()
+            status = result.status
+        elif isinstance(result, dict):
+            status = result.get("status", "ok")
+            checked_at = result.get("checked_at")
+        loop_result.record_tool(fn_name, fn_args, result, checked_at, status)
+
+        tool_calls_msg.append({
+            "id": tc_id,
+            "type": "function",
+            "function": {
+                "name": fn_name,
+                "arguments": json.dumps(fn_args),
+            },
+        })
+        tool_result_msgs.append({
+            "role": "tool",
+            "tool_call_id": tc_id,
+            "content": _result_to_json(result),
+        })
+
+    # Inject pre-run assistant + tool messages
+    messages.append({"role": "assistant", "content": None, "tool_calls": tool_calls_msg})
+    messages.extend(tool_result_msgs)
+
+    # ------------------------------------------------------------------
+    # 3.  Run the agent loop — search_rules + find_places only
+    # ------------------------------------------------------------------
+    agent_result = _run_loop(messages, _LOCATION_AGENT_TOOLS, session_id)
+
+    # Merge pre-run bookkeeping into agent_result
+    agent_result.tools_called = loop_result.tools_called + agent_result.tools_called
+    agent_result.sources_failed = loop_result.sources_failed + agent_result.sources_failed
+    agent_result.data_freshness = {**loop_result.data_freshness, **agent_result.data_freshness}
+    agent_result.mock_data = loop_result.mock_data or agent_result.mock_data
+    agent_result.raw_tool_results = {**loop_result.raw_tool_results, **agent_result.raw_tool_results}
+    loop_result = agent_result
     mock_data = loop_result.mock_data
     footer = _build_footer(loop_result, mock_data)
     full_answer = loop_result.final_answer + footer

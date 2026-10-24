@@ -22,14 +22,17 @@ class Settings(BaseSettings):
     AIRHUB_CLIENT_SECRET: str = "sim-client-secret"
     AIRHUB_BASE_URL: str = "https://airhub-api-sandbox.airspacelink.com"
 
-    # Feature flags for live data sources (both off by default)
+    # Feature flags for live data sources
     USE_LIVE_TFR: bool = False
     USE_LIVE_NSUFR: bool = False
+    USE_LIVE_FAA: bool = False       # true → query FAA ArcGIS for facility-map ceiling
+    USE_LIVE_WEATHER: bool = True    # true → query Open-Meteo (free, no key required)
 
     # Paths
     BASE_DIR: Path = Path(__file__).resolve().parent.parent
     FIXTURES_DIR: Path = BASE_DIR / "fixtures"
     DATA_UASFM_DIR: Path = BASE_DIR / "data" / "uasfm"
+    DATA_CLASS_AIRSPACE_DIR: Path = BASE_DIR / "data" / "class_airspace"
     UASFM_SAMPLE_PATH: Path = FIXTURES_DIR / "uasfm_sample.geojson"
     MOCK_OSM_PATH: Path = BASE_DIR / "data" / "mock_osm.geojson"
     CHROMA_PATH: str = ".chroma"

@@ -67,6 +67,43 @@ class FacilityCeilingResult(BaseResult):
 
 
 # ---------------------------------------------------------------------------
+# FAA Class Airspace (B/C/D/E boundaries)
+# ---------------------------------------------------------------------------
+
+class AirspaceLayer(BaseModel):
+    name: str
+    airspace_class: str
+    local_type: Optional[str] = None       # e.g. CLASS_C, CLASS_E2, CLASS_E5
+    airport_icao: Optional[str] = None
+    floor_ft: float = 0
+    floor_ref: Optional[str] = None        # SFC (above ground) | MSL (above sea level)
+    ceiling_ft: Optional[float] = None     # None = up to overlying airspace
+    ceiling_ref: Optional[str] = None
+    hours: Optional[str] = None            # H24 = always; NOTAM = part-time, see NOTAMs
+
+
+class ClassAirspaceResult(BaseResult):
+    surface_class: Optional[str] = None    # most restrictive class starting at the ground; None = none found
+    surface_layers: list[AirspaceLayer] = Field(default_factory=list)
+    overlying_layers: list[AirspaceLayer] = Field(default_factory=list)
+    fetched_at: Optional[str] = None
+    source_url: Optional[str] = None
+
+
+# ---------------------------------------------------------------------------
+# Combined FAA airspace (Class Airspace + UAS Facility Map)
+# ---------------------------------------------------------------------------
+
+class FaaAirspaceResult(BaseResult):
+    airspace_class: Optional[str] = None   # None = could not be determined
+    airspace_class_source: Optional[str] = None   # faa_class_airspace | faa_facility_map
+    controlled: Optional[bool] = None
+    class_airspace: ClassAirspaceResult
+    facility_map: FacilityCeilingResult
+    notes: list[str] = Field(default_factory=list)
+
+
+# ---------------------------------------------------------------------------
 # Advisories (NSUFR, TFR, local)
 # ---------------------------------------------------------------------------
 
@@ -121,6 +158,25 @@ class TFRNotice(BaseModel):
 class TFRResult(BaseResult):
     tfrs: list[TFRNotice] = Field(default_factory=list)
     cache_age_s: Optional[float] = None
+
+
+# ---------------------------------------------------------------------------
+# Weather
+# ---------------------------------------------------------------------------
+
+class WeatherResult(BaseResult):
+    temperature_f: Optional[float] = None
+    wind_mph: Optional[float] = None
+    gusts_mph: Optional[float] = None
+    wind_direction_deg: Optional[float] = None
+    cloud_cover_pct: Optional[float] = None
+    relative_humidity_pct: Optional[float] = None
+    is_day: Optional[bool] = None
+    weather_code: Optional[int] = None
+    weather_description: Optional[str] = None
+    precipitation_in: Optional[float] = None
+    observed_at: Optional[str] = None
+    source: str = "open-meteo"
 
 
 # ---------------------------------------------------------------------------
