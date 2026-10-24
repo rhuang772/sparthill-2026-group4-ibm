@@ -1,12 +1,10 @@
 import { useState, useEffect }from 'react';
-import { saveBriefing } from '../services/offlineStorage';
 import { useNavigate } from 'react-router-dom';
 import AppShell from '../components/AppShell';
 import BackButton from '../components/BackButton';
 import { useAppContext } from '../context/AppContext';
 import type { CheckResponse } from '../types';
-import { mockBriefing, mockBriefingNoGo } from '../data/mockBriefing';
-import { isNearSJCAirspace } from '../utils/caScope';
+import { downloadBriefingPdf } from '../services/briefingPdf';
 import styles from './BriefingPage.module.css';
 
 const API_BASE = import.meta.env.VITE_API_BASE ?? 'http://localhost:8000';
@@ -67,14 +65,6 @@ export default function BriefingPage() {
   const timeLabel = flightPlan?.time ?? '';
   const subLabel = [dateLabel, timeLabel].filter(Boolean).join(' · ');
 
-  // The "save offline" demo button stores the canned mock scenario (not the
-  // live API response) — it's explicitly a demo artifact, picked the same
-  // way the old mock-only BriefingPage chose between its two scenarios.
-  const pack =
-    flightPlan && isNearSJCAirspace(flightPlan.location.lat, flightPlan.location.lng)
-      ? mockBriefingNoGo
-      : mockBriefing;
-
   return (
     <AppShell currentStep={3}>
       <div className={styles.page}>
@@ -127,15 +117,27 @@ export default function BriefingPage() {
         </section>
 
         <section className={styles.section}>
-          <p role="status" style={{marginBottom: '0.75rem'}}>Demo scenario only — these findings are mocked, not a live safety or authorization check.</p>
-          <button className={styles.ctaButton} onClick={async () => {
-            try {
-              await saveBriefing({ briefing: pack, flightPlan, demo: true });
-              setSaveMessage('Demo briefing saved on this device.');
-            } catch { setSaveMessage('Unable to save locally. Check browser storage settings.'); }
-          }}>Save this demo briefing offline</button>
+          <button
+            className={styles.ctaButton}
+            disabled={!response || !flightPlan || loading}
+            onClick={() => {
+              if (!response || !flightPlan) return;
+              try {
+                downloadBriefingPdf({
+                  response,
+                  flightPlan,
+                  generatedAt: new Date().toISOString(),
+                });
+                setSaveMessage('Briefing PDF downloaded.');
+              } catch {
+                setSaveMessage('Unable to create the briefing PDF.');
+              }
+            }}
+          >
+            Download briefing as PDF
+          </button>
           <p role="status">{saveMessage}</p>
-          <p><a href="/saved">View saved briefings &amp; privacy settings</a></p>
+          <p><a href="/privacy">Privacy &amp; local data settings</a></p>
         </section>
         {/* CTA */}
         {response && (

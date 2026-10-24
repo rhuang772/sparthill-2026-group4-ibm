@@ -4,7 +4,7 @@ import FlightPlanPage from './pages/FlightPlanPage';
 import BriefingPage from './pages/BriefingPage';
 import LessonPage from './pages/LessonPage';
 import ChatPage from './pages/ChatPage';
-import SavedBriefingsPage from './pages/SavedBriefingsPage';
+import PrivacyPage from './pages/PrivacyPage';
 
 export default function App() {
   return (
@@ -14,7 +14,7 @@ export default function App() {
       <Route path="/briefing" element={<BriefingPage />} />
       <Route path="/lesson" element={<LessonPage />} />
       <Route path="/chat" element={<ChatPage />} />
-      <Route path="/saved" element={<SavedBriefingsPage />} />
+      <Route path="/privacy" element={<PrivacyPage />} />
     </Routes>
   );
 }
