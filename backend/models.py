@@ -111,3 +111,29 @@ class TfrResult(BaseModel):
     stale: bool
     note: str | None
     source: str = "FAA tfr.faa.gov"
+    
+class WaterBody(BaseModel):
+    feature_id: str | None
+    name: str | None
+    kind: str                      # from the layer's type label, or "waterbody" / "flowline"
+    layer: str                     # "waterbody" or "flowline"
+    distance_m: float              # 0 if the point is in this water
+    nearest_lat: float
+    nearest_lon: float
+    contains_point: bool
+
+
+class WaterResult(BaseModel):
+    lat: float
+    lon: float
+    radius_m: float
+    water_found: bool
+    point_over_water: bool
+    nearest_distance_m: float | None
+    risk: str                      # "high", "moderate" or "none"
+    water_bodies: list[WaterBody]  # nearest first
+    total_found: int
+    truncated: bool
+    fetched_at: str
+    note: str | None
+    source: str = "USGS 3DHP_all"
