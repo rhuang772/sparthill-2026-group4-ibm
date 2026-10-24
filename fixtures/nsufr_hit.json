@@ -1,0 +1,14 @@
+{
+  "checked_at": "2025-01-15T12:00:00Z",
+  "restrictions": [
+    {
+      "id": "NSUFR-SIM-001",
+      "name": "Simulated National Security UAS Flight Restriction",
+      "description": "This is a simulated NSUFR fixture. A real NSUFR is issued as a special security instruction under 14 CFR 99.7. Contact the designated ATC facility before any flight operation in or near this area.",
+      "center_lat": 38.8951,
+      "center_lon": -77.0364,
+      "radius_nm": 15.0,
+      "source": "fixture-nsufr"
+    }
+  ]
+}

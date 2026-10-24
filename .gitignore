@@ -1,0 +1,4 @@
+.chroma/
+data/uasfm/*.geojson
+data/uasfm/meta.json
+.env

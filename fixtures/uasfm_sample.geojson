@@ -1,0 +1,69 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [-121.88335, 37.29167],
+          [-121.87502, 37.29167],
+          [-121.87502, 37.30001],
+          [-121.88335, 37.30001],
+          [-121.88335, 37.29167]
+        ]]
+      },
+      "properties": {
+        "OBJECTID": 1,
+        "GLOBALID": "9d183157-fac8-4ba2-a74c-76b6e660607b",
+        "CEILING": 300,
+        "UNIT": "Feet",
+        "ARPT_COUNT": 1,
+        "AIRS_COUNT": 1,
+        "APT1_FAAID": "SJC",
+        "APT1_ICAO": "KSJC",
+        "APT1_NAME": "Mineta San Jose Intl",
+        "APT1_LAANC": 1,
+        "APT1_Enabled": "107-AA,107-FC,44809-AA",
+        "AIRSPACE_1": "C",
+        "MAP_EFF": "10/1/2026",
+        "LAST_EDIT": "8/11/2017",
+        "LATITUDE": 37.29584,
+        "LONGITUDE": -121.879185,
+        "REGION": "Western"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [-121.94168, 37.39167],
+          [-121.93335, 37.39167],
+          [-121.93335, 37.40001],
+          [-121.94168, 37.40001],
+          [-121.94168, 37.39167]
+        ]]
+      },
+      "properties": {
+        "OBJECTID": 2,
+        "GLOBALID": "d80e5644-ad0a-43c8-81b0-76fd9d7dcd1c",
+        "CEILING": 400,
+        "UNIT": "Feet",
+        "ARPT_COUNT": 1,
+        "AIRS_COUNT": 1,
+        "APT1_FAAID": "SJC",
+        "APT1_ICAO": "KSJC",
+        "APT1_NAME": "Mineta San Jose Intl",
+        "APT1_LAANC": 1,
+        "APT1_Enabled": "107-AA,107-FC,44809-AA",
+        "AIRSPACE_1": "C",
+        "MAP_EFF": "10/1/2026",
+        "LAST_EDIT": "8/17/2026",
+        "LATITUDE": 37.39584,
+        "LONGITUDE": -121.937515,
+        "REGION": "Western"
+      }
+    }
+  ]
+}

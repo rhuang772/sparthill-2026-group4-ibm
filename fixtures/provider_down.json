@@ -1,0 +1,6 @@
+{
+  "status": "failed",
+  "message": "Simulated provider failure — upstream service unavailable (503). Could not verify live restrictions from this source.",
+  "provider": "sim-provider",
+  "checked_at": "2025-01-15T12:00:00Z"
+}
