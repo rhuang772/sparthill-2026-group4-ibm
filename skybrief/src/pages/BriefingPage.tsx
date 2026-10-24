@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { saveBriefing } from '../services/offlineStorage';
 import { useNavigate } from 'react-router-dom';
 import AppShell from '../components/AppShell';
 import BackButton from '../components/BackButton';
@@ -18,6 +19,7 @@ function toFlightTime(date: string, time: string): string | null {
 export default function BriefingPage() {
   const navigate = useNavigate();
   const { flightPlan } = useAppContext();
+  const [saveMessage, setSaveMessage] = useState('');
 
   const [response, setResponse] = useState<CheckResponse | null>(null);
   const [loading, setLoading] = useState(false);
@@ -114,6 +116,17 @@ export default function BriefingPage() {
           </div>
         </section>
 
+        <section className={styles.section}>
+          <p role="status" style={{marginBottom: '0.75rem'}}>Demo scenario only — these findings are mocked, not a live safety or authorization check.</p>
+          <button className={styles.ctaButton} onClick={async () => {
+            try {
+              await saveBriefing({ briefing: pack, flightPlan, demo: true });
+              setSaveMessage('Demo briefing saved on this device.');
+            } catch { setSaveMessage('Unable to save locally. Check browser storage settings.'); }
+          }}>Save this demo briefing offline</button>
+          <p role="status">{saveMessage}</p>
+          <p><a href="/saved">View saved briefings &amp; privacy settings</a></p>
+        </section>
         {/* CTA */}
         {response && (
           <div className={styles.ctaRow}>
