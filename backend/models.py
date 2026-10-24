@@ -137,3 +137,28 @@ class WaterResult(BaseModel):
     fetched_at: str
     note: str | None
     source: str = "USGS 3DHP_all"
+
+
+class PopulationFeature(BaseModel):
+    feature_id: str
+    name: str
+    kind: str
+    distance_m: float
+    lat: float
+    lon: float
+    weight: float
+    osm_type: str
+    tags: dict[str, str]
+
+
+class PopulationResult(BaseModel):
+    lat: float
+    lon: float
+    radius_m: float
+    status: str  # "low", "moderate", "high"; "unknown" is used if data is unavailable
+    score: float  # heuristic score, not people per square kilometer
+    features: list[PopulationFeature]
+    features_found: int
+    fetched_at: str
+    note: str | None
+    source: str = "OpenStreetMap Overpass API"
