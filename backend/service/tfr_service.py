@@ -4,7 +4,7 @@ import math
 import re
 import time
 import xml.etree.ElementTree as ET
-from datetime import datetime, timezone, time as dtime
+from datetime import datetime, timedelta, timezone, time as dtime
 
 import httpx
 
@@ -124,19 +124,28 @@ def _parse_detail(xml_text: str) -> dict:
     return {**meta, "areas": areas}
 
 
-def _time_status(detail: dict, area: dict, now: datetime) -> str:
+def _time_status(detail: dict, area: dict, win_start: datetime, win_end: datetime) -> str:
     if detail["tz"] != "UTC":
         return "unknown"                     # can't convert local times reliably
     start, end = _parse_time(detail["effective"]), _parse_time(detail["expires"])
-    if end and now > end:
+    if end and win_start > end:
         return "expired"
-    if start and now < start:
+    if start and win_end < start:
         return "scheduled"
+
     if area["daily"]:
-        s, e = dtime.fromisoformat(area["daily"][0]), dtime.fromisoformat(area["daily"][1])
-        t = now.time()
-        inside = (s <= t <= e) if s <= e else (t >= s or t <= e)
-        return "active" if inside else "scheduled"
+        s = dtime.fromisoformat(area["daily"][0])
+        e = dtime.fromisoformat(area["daily"][1])
+        day = win_start.date() - timedelta(days=1)       # start a day early for overnight windows
+        while day <= win_end.date():
+            ds = datetime.combine(day, s, tzinfo=timezone.utc)
+            de = datetime.combine(day if s <= e else day + timedelta(days=1), e, tzinfo=timezone.utc)
+            in_range = (not end or ds <= end) and (not start or de >= start)
+            if in_range and ds <= win_end and win_start <= de:
+                return "active"
+            day += timedelta(days=1)
+        return "outside_hours"
+
     return "active" if (start or end) else "unknown"
 
 
@@ -194,9 +203,15 @@ class TfrService:
             except (httpx.HTTPError, KeyError, ValueError, TypeError) as e:
                 log.warning("TFR refresh failed: %s", e)   # keep serving the old state
 
-    async def get_tfrs(self, lat: float, lon: float, radius_m: float) -> TfrResult:
+    async def get_tfrs(self, lat: float, lon: float, radius_m: float,
+                       start: datetime | None = None, end: datetime | None = None) -> TfrResult:
         await self._load()
-        base = dict(lat=lat, lon=lon, radius_m=radius_m)
+        now = datetime.now(timezone.utc)
+        win_start = start or now
+        win_end = end or (win_start + timedelta(hours=1))
+
+        base = dict(lat=lat, lon=lon, radius_m=radius_m,
+                    window_start=win_start.isoformat(), window_end=win_end.isoformat())
         tfrs, fetched_at = _state["tfrs"], _state["at"]
 
         if tfrs is None or fetched_at is None:
@@ -210,7 +225,14 @@ class TfrService:
             **base, tfrs_checked=len(tfrs), unresolved_notams=_state["unresolved"],
             data_fetched_at=datetime.fromtimestamp(fetched_at, timezone.utc).isoformat(),
             data_age_seconds=age, stale=age > CACHE_TTL_S)
-        stale_note = "Stale data, refresh failed." if common["stale"] else None
+
+        notes = []
+        if common["stale"]:
+            notes.append("Stale data, refresh failed.")
+        if win_start > now + timedelta(hours=1):
+            notes.append("TFRs are often issued on short notice, so none being known now does not "
+                         "mean none will apply then. Recheck close to flight time.")
+        note = " ".join(notes) or None
 
         if age > MAX_STALE_S:
             return TfrResult(**common, status="unknown", tfrs=[],
@@ -220,7 +242,6 @@ class TfrService:
                              note="No TFR shapes were parsed, which is unexpected. Verify the parser.")
 
         area_box = _search_bbox(lat, lon, radius_m)
-        now = datetime.now(timezone.utc)
         hits = []
         for rec in tfrs:
             meta, det = rec["meta"], rec["detail"]
@@ -233,16 +254,17 @@ class TfrService:
                     floor_ft=area["floor_ft"], floor_datum=area["floor_datum"],
                     ceiling_ft=area["ceiling_ft"], ceiling_datum=area["ceiling_datum"],
                     effective=det["effective"], expires=det["expires"],
-                    time_status=_time_status(det, area, now),
+                    time_status=_time_status(det, area, win_start, win_end),
                     reaches_drone_altitudes=area["floor_ft"] is None or area["floor_ft"] <= DRONE_ALT_FT,
                 ))
 
-        relevant = [h for h in hits if h.time_status != "expired" and h.reaches_drone_altitudes]
+        relevant = [h for h in hits
+                    if h.time_status in ("active", "unknown") and h.reaches_drone_altitudes]
         if relevant:
-            return TfrResult(**common, status="restricted", tfrs=hits, note=stale_note)
+            return TfrResult(**common, status="restricted", tfrs=hits, note=note)
         if _state["unresolved"]:
-            return TfrResult(
-                **common, status="unknown", tfrs=hits,
-                note=f"{len(_state['unresolved'])} TFR(s) could not be checked. "
-                     "Check tfr.faa.gov before flying.")
-        return TfrResult(**common, status="clear", tfrs=hits, note=stale_note)
+            unresolved_note = (f"{len(_state['unresolved'])} TFR(s) could not be checked. "
+                               "Check tfr.faa.gov before flying.")
+            return TfrResult(**common, status="unknown", tfrs=hits,
+                             note=" ".join(filter(None, [note, unresolved_note])))
+        return TfrResult(**common, status="clear", tfrs=hits, note=note)

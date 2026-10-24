@@ -20,6 +20,52 @@ class Weather(BaseModel):
     snowfall_in: float
     source: str = "open-meteo"
     
+class WeatherHour(BaseModel):
+    time: str                                  # UTC, start of the hour
+    temperature_f: float | None
+    wind_mph: float | None                     # at 10 m
+    wind_mph_120m: float | None                # at ~400 ft, close to max drone altitude
+    gusts_mph: float | None
+    wind_direction_deg: float | None
+    cloud_cover_pct: float | None
+    pressure_hpa: float | None
+    relative_humidity_pct: float | None
+    visibility_m: float | None
+    is_day: bool | None
+    weather_code: int | None
+    weather_description: str
+    precipitation_in: float | None
+    precipitation_probability_pct: float | None
+    rain_in: float | None
+    showers_in: float | None
+    snowfall_in: float | None
+
+
+class WeatherSummary(BaseModel):
+    hours: int
+    min_temperature_f: float | None
+    max_temperature_f: float | None
+    max_wind_mph: float | None
+    max_wind_mph_120m: float | None
+    max_gusts_mph: float | None
+    min_visibility_m: float | None
+    total_precipitation_in: float
+    max_precipitation_probability_pct: float | None
+    worst_weather_code: int | None             # highest WMO code, a rough severity measure
+    worst_weather_description: str | None
+
+
+class WeatherForecast(BaseModel):
+    lat: float
+    lon: float
+    window_start: str
+    window_end: str
+    hours: list[WeatherHour]
+    summary: WeatherSummary
+    fetched_at: str
+    note: str | None
+    source: str = "open-meteo"
+    
 class HeightLimit(BaseModel):
     lat: float
     lon: float
@@ -38,6 +84,7 @@ class TfrItem(BaseModel):
     notam_id: str
     type: str | None
     description: str | None
+    time_status: str
     area_name: str | None
     floor_ft: float | None
     floor_datum: str | None          # "MSL" or "AGL"
@@ -53,6 +100,8 @@ class TfrResult(BaseModel):
     lat: float
     lon: float
     radius_m: float
+    window_start: str              # UTC, ISO 8601
+    window_end: str
     status: str                      # "restricted", "clear", or "unknown"
     tfrs: list[TfrItem]
     tfrs_checked: int
