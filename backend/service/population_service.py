@@ -34,7 +34,6 @@ class PopulationService:
     # returned categories to transparent app heuristics, not measured population.
     CATEGORY_RULES = (
         ("education.school", "school", 3.0),
-        ("education.kindergarten", "kindergarten", 2.0),
         ("education.college", "college", 3.0),
         ("education.university", "university", 4.0),
         ("education", "education", 3.0),
@@ -48,9 +47,10 @@ class PopulationService:
     CATEGORIES = ",".join(
         [
             "education",
+            "education.university",
             "leisure.park",
             "leisure.playground",
-            "activity.community_center",
+            #"activity.community_center",
             "entertainment",
         ]
     )
