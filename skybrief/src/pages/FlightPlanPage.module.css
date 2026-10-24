@@ -1,0 +1,202 @@
+/* ── FlightPlanPage ─────────────────────────────────────────────────────── */
+
+.page {
+  min-height: calc(100vh - 60px);
+  background: var(--color-bg);
+  padding: 1.25rem 0;
+  box-sizing: border-box;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 1.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+/* ── Map column ─────────────────────────────────────────────────────────── */
+
+.mapColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.mapHeading {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  margin: 0 0 6px 0;
+}
+
+.mapWrapper {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-card);
+  height: 480px;
+}
+
+.mapCaption {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  text-align: center;
+  margin: 4px 0 0 0;
+}
+
+.mapCaptionCoords {
+  color: var(--color-brand);
+  font-weight: 600;
+}
+
+/* ── Controls panel ─────────────────────────────────────────────────────── */
+
+.panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.sectionLabel {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--color-brand);
+  margin: 0 0 8px 0;
+}
+
+/* Location section */
+.locationBlock {
+  background: var(--color-surface-raised);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  border: 1px solid var(--color-border);
+}
+
+.locationPlaceholder {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  font-style: italic;
+  margin: 0;
+}
+
+.locationCoords {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0 0 2px 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.locationSub {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* Date/Time fields */
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fieldLabel {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-brand);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.fieldInput {
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
+  font-size: 16px;
+  padding: 12px 14px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  width: 100%;
+}
+
+.fieldInput:focus {
+  border-color: var(--color-brand);
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1);
+}
+
+.fieldHint {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* CTA */
+.ctaButton {
+  width: 100%;
+  min-height: var(--tap-target);
+  padding: 0;
+  border-radius: var(--radius-md);
+  border: none;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.ctaEnabled {
+  background: var(--color-brand);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(15, 118, 110, 0.25);
+}
+
+.ctaEnabled:hover {
+  background: var(--color-brand-hover);
+  box-shadow: 0 4px 16px rgba(15, 118, 110, 0.35);
+}
+
+.ctaDisabled {
+  background: var(--color-surface-raised);
+  color: var(--color-text-secondary);
+  cursor: not-allowed;
+  border: 1px solid var(--color-border);
+}
+
+/* Responsive */
+@media (max-width: 800px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .panel {
+    margin-top: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .mapWrapper {
+    height: 280px;
+  }
+}

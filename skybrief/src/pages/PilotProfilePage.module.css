@@ -1,0 +1,251 @@
+.page {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 1.75rem 0 5rem;
+}
+
+/* ── Page header ── */
+.heading {
+  font-size: 1.875rem;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.025em;
+}
+
+.subheading {
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+  margin: 0 0 2rem;
+  line-height: 1.55;
+}
+
+/* ── Section wrapper ── */
+.section {
+  margin-bottom: 2rem;
+}
+
+.sectionLabel {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--color-brand);
+  margin: 0 0 0.75rem;
+}
+
+/* ── Radio cards ── */
+.cardGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.radioCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 1rem 1.125rem;
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+  text-align: left;
+  width: 100%;
+}
+
+.radioCard:hover {
+  border-color: var(--color-brand);
+  background: var(--color-brand-subtle);
+  box-shadow: var(--shadow-card);
+}
+
+.radioCardSelected {
+  border-color: var(--color-brand) !important;
+  background: var(--color-brand-subtle) !important;
+  box-shadow: var(--shadow-card) !important;
+}
+
+.radioCardTitle {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.radioCardDesc {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+}
+
+/* ── Checkbox cards ── */
+.checkboxGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.checkboxCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0.875rem 1.125rem;
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.checkboxCard:hover:not(.checkboxCardDisabled) {
+  border-color: var(--color-brand);
+  background: var(--color-brand-subtle);
+}
+
+.checkboxCardChecked {
+  border-color: var(--color-brand);
+  background: var(--color-brand-subtle);
+}
+
+.checkboxCardDisabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.hiddenCheckbox {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.customCheckbox {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  border: 2px solid var(--color-border);
+  background: var(--color-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-brand);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.checkboxCardChecked .customCheckbox {
+  border-color: var(--color-brand);
+  background: var(--color-brand-subtle);
+}
+
+.checkboxLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.checkboxSub {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--color-text-secondary);
+}
+
+/* ── Summary card ── */
+.summaryCard {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: 1.125rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.summaryLineOk {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: var(--color-success);
+  line-height: 1.55;
+}
+
+.summaryLineWarn {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: var(--color-caution);
+  line-height: 1.55;
+  font-weight: 600;
+}
+
+.summaryLineMuted {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: var(--color-text-secondary);
+  line-height: 1.55;
+}
+
+/* ── CTA ── */
+.ctaRow {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  margin-top: 2rem;
+}
+
+.cta {
+  width: 100%;
+  min-height: var(--tap-target);
+  padding: 0 2rem;
+  background: var(--color-brand);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(15, 118, 110, 0.25);
+}
+
+.cta:hover:not(:disabled) {
+  background: var(--color-brand-hover);
+  box-shadow: 0 4px 16px rgba(15, 118, 110, 0.35);
+}
+
+.ctaDisabled {
+  background: var(--color-surface-raised) !important;
+  color: var(--color-text-secondary) !important;
+  box-shadow: none !important;
+  cursor: not-allowed;
+}
+
+.ctaHint {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin: 0;
+  text-align: center;
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .cardGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .heading {
+    font-size: 1.5rem;
+  }
+}
