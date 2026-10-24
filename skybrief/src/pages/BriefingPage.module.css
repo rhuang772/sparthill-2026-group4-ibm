@@ -159,6 +159,32 @@
   line-height: 1.65;
 }
 
+.toolList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 0.25rem 1.25rem;
+  font-size: 0.8125rem;
+}
+
+.toolItem {
+  white-space: nowrap;
+}
+
+.caret {
+  display: inline-block;
+  width: 7px;
+  height: 1em;
+  background: var(--color-brand);
+  animation: caretBlink 1s steps(2, start) infinite;
+}
+
+@keyframes caretBlink {
+  to { visibility: hidden; }
+}
+
 .mockNotice {
   font-size: 0.8125rem;
   color: var(--color-text-secondary);

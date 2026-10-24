@@ -1,0 +1,44 @@
+[
+  {
+    "id": "sfo_class_b",
+    "description": "San Francisco International Airport (Class B, LAANC ceiling 0)",
+    "params": {"lat": 37.6213, "lon": -122.379},
+    "expected_class": "B"
+  },
+  {
+    "id": "sjc_class_c_ceiling_0",
+    "description": "San Jose International Airport (Class C, part-time surface area, ceiling 0)",
+    "params": {"lat": 37.3625, "lon": -121.929},
+    "expected_class": "C"
+  },
+  {
+    "id": "downtown_sj_class_c_ceiling_100",
+    "description": "Downtown San Jose under the Class C shelf (LAANC ceiling 100 ft)",
+    "params": {"lat": 37.3352, "lon": -121.8811, "planned_altitude_ft": 200, "radius_m": 300},
+    "expected_class": "C"
+  },
+  {
+    "id": "palo_alto_class_d",
+    "description": "Palo Alto Airport (Class D, part-time, MSL overlying layer)",
+    "params": {"lat": 37.4611, "lon": -122.115, "planned_altitude_ft": 100},
+    "expected_class": "D"
+  },
+  {
+    "id": "livermore_class_d",
+    "description": "Livermore Municipal Airport (Class D, part-time)",
+    "params": {"lat": 37.6934, "lon": -121.8204, "flight_time": "2026-10-25T17:00:00Z"},
+    "expected_class": "D"
+  },
+  {
+    "id": "half_moon_bay_class_g",
+    "description": "Half Moon Bay coast (Class G, overlying layer with MSL floor)",
+    "params": {"lat": 37.5134, "lon": -122.5011, "planned_altitude_ft": 150, "radius_m": 200},
+    "expected_class": "G"
+  },
+  {
+    "id": "henry_coe_unconfirmed",
+    "description": "Henry W. Coe State Park, outside the downloaded airspace data (class unconfirmed)",
+    "params": {"lat": 37.1858, "lon": -121.47},
+    "expected_class": null
+  }
+]

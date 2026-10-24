@@ -36,6 +36,20 @@
   line-height: 1.65;
 }
 
+.caret {
+  display: inline-block;
+  width: 7px;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  background: var(--color-brand);
+  animation: caretBlink 1s steps(2, start) infinite;
+}
+
+@keyframes caretBlink {
+  to { visibility: hidden; }
+}
+
 .citationRow {
   margin-top: 9px;
 }

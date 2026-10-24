@@ -130,7 +130,14 @@
 .thinkingRow {
   display: flex;
   justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
   margin-bottom: 12px;
+}
+
+.statusText {
+  font-size: 13px;
+  color: var(--color-text-secondary);
 }
 
 .thinkingBubble {

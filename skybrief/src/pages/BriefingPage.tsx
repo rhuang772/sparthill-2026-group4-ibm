@@ -4,12 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import AppShell from '../components/AppShell';
 import BackButton from '../components/BackButton';
 import { useAppContext } from '../context/AppContext';
+import { streamSkye, type StreamTool } from '../services/skyeStream';
 import type { CheckResponse } from '../types';
 import { mockBriefing, mockBriefingNoGo } from '../data/mockBriefing';
 import { isNearSJCAirspace } from '../utils/caScope';
 import styles from './BriefingPage.module.css';
-
-const API_BASE = import.meta.env.VITE_API_BASE ?? 'http://localhost:8000';
 
 /** Convert "2025-12-01" + "14:00" → "2025-12-01T14:00:00" (local, no Z so the
  *  backend treats it as a naive hint rather than forcing UTC). */
@@ -26,6 +25,9 @@ export default function BriefingPage() {
   const [response, setResponse] = useState<CheckResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [streamText, setStreamText] = useState('');
+  const [statusText, setStatusText] = useState<string | null>(null);
+  const [tools, setTools] = useState<StreamTool[]>([]);
 
   useEffect(() => {
     if (!flightPlan) return;
@@ -40,20 +42,29 @@ export default function BriefingPage() {
 
     setLoading(true);
     setError(null);
+    setResponse(null);
+    setStreamText('');
+    setStatusText(null);
+    setTools([]);
 
-    fetch(`${API_BASE}/check?${params}`)
-      .then(r => {
-        if (!r.ok) throw new Error(`API error ${r.status}`);
-        return r.json() as Promise<CheckResponse>;
-      })
-      .then(data => {
+    const controller = new AbortController();
+    streamSkye<CheckResponse>('/check/stream', params, {
+      onStatus: setStatusText,
+      onTool: tool =>
+        setTools(prev => [...prev.filter(t => t.name !== tool.name), tool]),
+      onReset: () => setStreamText(''),
+      onToken: chunk => setStreamText(prev => prev + chunk),
+      onDone: data => {
         setResponse(data);
         setLoading(false);
-      })
-      .catch(err => {
-        setError(String(err));
-        setLoading(false);
-      });
+      },
+    }, controller.signal).catch(err => {
+      if (controller.signal.aborted) return;
+      setError(String(err));
+      setLoading(false);
+    });
+
+    return () => controller.abort();
   }, [flightPlan]);
 
   // Format the location / time header line
@@ -89,10 +100,27 @@ export default function BriefingPage() {
         {/* Single briefing box */}
         <section className={styles.section}>
           <div className={styles.briefingBox}>
-            {loading && (
+            {loading && !streamText && (
               <div className={styles.loadingState}>
                 <span className={styles.spinner} aria-hidden="true" />
-                <p>Skye is checking your flight conditions…</p>
+                <p>{statusText ?? 'Skye is checking your flight conditions…'}</p>
+                {tools.length > 0 && (
+                  <ul className={styles.toolList}>
+                    {tools.map(t => (
+                      <li key={t.name} className={styles.toolItem}>
+                        {t.state === 'running' ? '…' : t.status === 'ok' ? '✓' : '⚠'} {t.label}
+                        {t.state === 'done' && t.status !== 'ok' && ` (${t.status})`}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            )}
+
+            {loading && streamText && (
+              <div className={styles.markdownOutput} aria-live="polite">
+                <MarkdownText text={streamText} />
+                <span className={styles.caret} aria-hidden="true" />
               </div>
             )}
 

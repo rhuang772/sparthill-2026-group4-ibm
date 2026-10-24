@@ -8,7 +8,6 @@ from app.providers.airhub_sim import AirHubError, AirHubSimulator, make_sim_clie
 from app.providers import airspace as airspace_mod
 from app.providers.faa_facility_map import get_facility_ceiling, load
 from app.providers.nsufr import get_nsufr
-from app.providers.tfr import get_tfrs
 from app.providers.mock_osm import find_places
 
 
@@ -94,30 +93,6 @@ def test_nsufr_returns_fixture():
     assert result.fixture is True
     assert len(result.restrictions) >= 1
     assert result.restrictions[0].id == "NSUFR-SIM-001"
-
-
-# ---------------------------------------------------------------------------
-# TFR
-# ---------------------------------------------------------------------------
-
-def test_tfr_returns_fixture():
-    result = get_tfrs(38.89, -77.03)
-    assert result.status == "ok"
-    assert result.fixture is True
-    assert len(result.tfrs) >= 1
-
-
-def test_tfr_time_filter_excludes_expired():
-    import datetime as dt
-    # Use a flight time in the past (before 2025)
-    old_time = dt.datetime(2020, 1, 1, tzinfo=dt.timezone.utc)
-    result = get_tfrs(38.89, -77.03, flight_time=old_time)
-    # Fixture TFR starts 2025-01-15 — should be excluded
-    assert all(
-        tfr.effective_end is None or tfr.effective_start is None or
-        "2025" not in (tfr.effective_start or "")
-        for tfr in result.tfrs
-    )
 
 
 # ---------------------------------------------------------------------------

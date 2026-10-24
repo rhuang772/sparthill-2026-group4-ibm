@@ -14,6 +14,8 @@ import pytest
 
 from app.schema import CheckResponse, RulesResponse
 
+pytestmark = pytest.mark.usefixtures("offline_providers")
+
 BANNED_WORDS = ["approved", "legal to fly", "safe", "clear"]
 
 # ---------------------------------------------------------------------------

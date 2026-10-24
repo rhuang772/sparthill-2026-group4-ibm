@@ -1,0 +1,194 @@
+Chapter 3a:
+Aviation Weather Sources
+Introduction
+In aviation, weather service is a combined effort of the National Weather Service (NWS), Federal
+Aviation Administration (FAA), Department of Defense (DOD), other aviation groups, and individuals.
+Because of the increasing need for worldwide weather services, foreign weather organizations also
+provide vital input. While weather forecasts are not 100 percent accurate, meteorologists, through
+careful scientific study and computer modeling, have the ability to predict weather patterns, trends,
+and characteristics with increasing accuracy. Through a complex system of weather services,
+government agencies, and independent weather observers, pilots and other aviation professionals
+receive the benefit of this vast knowledge base in the form of up-to-date weather reports and
+forecasts. These reports and forecasts enable pilots to make informed decisions regarding weather and
+flight safety before and during a flight.
+Surface Aviation Weather Observations
+Surface aviation weather observations are a compilation of elements of the current weather at
+individual ground stations across the United States. The network is made up of government and
+privately contracted facilities that provide continuous up-to-date weather information. Automated
+weather sources, such as the Automated Weather Observing Systems (AWOS), Automated Surface
+Observing Systems (ASOS), as well as other automated facilities, also play a major role in the gathering
+of surface observations.
+Surface observations provide local weather conditions and other relevant information for a specific
+airport. This information includes the type of report, station identifier, date and time, modifier (as
+required), wind, visibility, runway visual range (RVR), weather phenomena, sky condition,
+temperature/dew point, altimeter reading, and applicable remarks. The information gathered for the
+surface observation may be from a person, an automated station, or an automated station that is
+updated or enhanced by a weather observer. In any form, the surface observation provides valuable
+information about individual airports around the country. These reports cover a small area and will be
+beneficial to the remote pilot.
+Aviation Weather Reports
+Aviation weather reports are designed to give accurate depictions of current weather conditions. Each
+report provides current information that is updated at different times. Some typical reports are
+METARs and PIREPs. To view a weather report, go to http://www.aviationweather.gov/.
+Aviation Routine Weather Report (METAR)
+A METAR is an observation of current surface weather reported in a standard international format.
+METARs are issued on a regularly scheduled basis unless significant weather changes have occurred.
+A special METAR (SPECI) can be issued at any time between routine METAR reports.
+Example: METAR KGGG 161753Z AUTO 14021G26KT 3/4SM +TSRA BR BKN008 OVC012CB
+18/17 A2970 RMK PRESFR 
+Chapter 3a: Aviation Weather Sources
+Remote Pilot – Small Unmanned Aircraft Systems Study Guide 16
+A typical METAR report contains the following information in sequential order:
+1. Type of report—there are two types of METAR reports. The first is the routine METAR report
+that is transmitted on a regular time interval. The second is the aviation selected SPECI. This
+is a special report that can be given at any time to update the METAR for rapidly changing
+weather conditions, aircraft mishaps, or other critical information.
+2. Station identifier—a four-letter code as established by the International Civil Aviation
+Organization (ICAO). In the 48 contiguous states, a unique three-letter identifier is preceded
+by the letter “K.” For example, Gregg County Airport in Longview, Texas, is identified by the
+letters “KGGG,” K being the country designation and GGG being the airport identifier. In
+other regions of the world, including Alaska and Hawaii, the first two letters of the four-letter
+ICAO identifier indicate the region, country, or state. Alaska identifiers always begin with the
+letters “PA” and Hawaii identifiers always begin with the letters “PH.” Station identifiers can
+be found by searching various websites such as DUATS and NOAA's Aviation Weather
+Aviation Digital Data Services (ADDS).
+3. Date and time of report—depicted in a six-digit group (161753Z). The first two digits are the
+date. The last four digits are the time of the METAR/SPECI, which is always given in
+coordinated universal time (UTC). A “Z” is appended to the end of the time to denote the
+time is given in Zulu time (UTC) as opposed to local time.
+4. Modifier—denotes that the METAR/SPECI came from an automated source or that the report
+was corrected. If the notation “AUTO” is listed in the METAR/SPECI, the report came from an
+automated source. It also lists “AO1” (for no precipitation discriminator) or “AO2” (with
+precipitation discriminator) in the “Remarks” section to indicate the type of precipitation
+sensors employed at the automated station. When the modifier “COR” is used, it identifies a
+corrected report sent out to replace an earlier report that contained an error (for example:
+METAR KGGG 161753Z COR).
+5. Wind—reported with five digits (14021KT) unless the speed is greater than 99 knots, in which
+case the wind is reported with six digits. The first three digits indicate the direction the true
+wind is blowing from in tens of degrees. If the wind is variable, it is reported as “VRB.” The
+last two digits indicate the speed of the wind in knots unless the wind is greater than 99
+knots, in which case it is indicated by three digits. If the winds are gusting, the letter “G”
+follows the wind speed (G26KT). After the letter “G,” the peak gust recorded is provided. If
+the wind direction varies more than 60° and the wind speed is greater than six knots, a
+separate group of numbers, separated by a “V,” will indicate the extremes of the wind
+directions.
+6. Visibility—the prevailing visibility (¾ SM) is reported in statute miles as denoted by the letters
+“SM.” It is reported in both miles and fractions of miles. At times, runway visual range (RVR)
+is reported following the prevailing visibility. RVR is the distance a pilot can see down the
+runway in a moving aircraft. When RVR is reported, it is shown with an R, then the runway
+number followed by a slant, then the visual range in feet. For example, when the RVR is
+reported as R17L/1400FT, it translates to a visual range of 1,400 feet on runway 17 left.
+7. Weather—can be broken down into two different categories: qualifiers and weather
+phenomenon (+TSRA BR). First, the qualifiers of intensity, proximity, and the descriptor of the
+weather are given. The intensity may be light (–), moderate ( ), or heavy (+). Proximity only
+depicts weather phenomena that are in the airport vicinity. The notation “VC” indicates a
+specific weather phenomenon is in the vicinity of five to ten miles from the airport.
+Descriptors are used to describe certain types of precipitation and obscurations. Weather 
+Chapter 3a: Aviation Weather Sources
+Remote Pilot – Small Unmanned Aircraft Systems Study Guide 17
+phenomena may be reported as being precipitation, obscurations, and other phenomena,
+such as squalls or funnel clouds. Descriptions of weather phenomena as they begin or end
+and hailstone size are also listed in the “Remarks” sections of the report. [Figure 3-1]
+Figure 3-1. Descriptors and weather phenomena used in a typical METAR.
+8. Sky condition—always reported in the sequence of amount, height, and type or indefinite
+ceiling/height (vertical visibility) (BKN008 OVC012CB, VV003). The heights of the cloud bases
+are reported with a three-digit number in hundreds of feet AGL. Clouds above 12,000 feet are
+not detected or reported by an automated station. The types of clouds, specifically towering
+cumulus (TCU) or cumulonimbus (CB) clouds, are reported with their height. Contractions are
+used to describe the amount of cloud coverage and obscuring phenomena. The amount of
+sky coverage is reported in eighths of the sky from horizon to horizon. [Figure 3-2]
+Figure 3-2. Reportable contractions for sky condition.
+9. Temperature and dew point—the air temperature and dew point are always given in degrees
+Celsius (C) or (18/17). Temperatures below 0 °C are preceded by the letter “M” to indicate
+minus.
+10. Altimeter setting—reported as inches of mercury ("Hg) in a four-digit number group (A2970).
+It is always preceded by the letter “A.” Rising or falling pressure may also be denoted in the
+“Remarks” sections as “PRESRR” or “PRESFR,” respectively. 
+Chapter 3a: Aviation Weather Sources
+Remote Pilot – Small Unmanned Aircraft Systems Study Guide 18
+11. Zulu time—a term used in aviation for UTC, which places the entire world on one time
+standard.
+12. Remarks—the remarks section always begins with the letters “RMK.” Comments may or may
+not appear in this section of the METAR. The information contained in this section may
+include wind data, variable visibility, beginning and ending times of particular phenomenon,
+pressure information, and various other information deemed necessary. An example of a
+remark regarding weather phenomenon that does not fit in any other category would be:
+OCNL LTGICCG. This translates as occasional lightning in the clouds and from cloud to ground.
+Automated stations also use the remarks section to indicate the equipment needs
+maintenance.
+Example: METAR KGGG 161753Z AUTO 14021G26KT 3/4SM +TSRA BR BKN008 OVC012CB
+18/17 A2970 RMK PRESFR
+Explanation: Routine METAR for Gregg County Airport for the 16th day of the month at 1753Z
+automated source. Winds are 140 at 21 knots gusting to 26. Visibility is ¾ statute
+mile. Thunderstorms with heavy rain and mist. Ceiling is broken at 800 feet, overcast
+at 1,200 feet with cumulonimbus clouds. Temperature 18 °C and dew point 17 °C.
+Barometric pressure is 29.70 "Hg and falling rapidly.
+Aviation Forecasts
+Observed weather condition reports are often used in the creation of forecasts for the same area. A
+variety of different forecast products are produced and designed to be used in the preflight planning
+stage. The printed forecasts that pilots need to be familiar with are the terminal aerodrome forecast
+(TAF), aviation area forecast (FA), inflight weather advisories (Significant Meteorological Information
+(SIGMET), Airman’s Meteorological Information (AIRMET)), and the winds and temperatures aloft
+forecast (FB).
+Terminal Aerodrome Forecasts (TAF)
+A TAF is a report established for the five statute mile radius around an airport. TAF reports are
+usually given for larger airports. Each TAF is valid for a 24 or 30-hour time period and is updated four
+times a day at 0000Z, 0600Z, 1200Z, and 1800Z. The TAF utilizes the same descriptors and
+abbreviations as used in the METAR report. These weather reports can be beneficial to the remote
+pilot for flight planning purposes. The TAF includes the following information in sequential order:
+1. Type of report—a TAF can be either a routine forecast (TAF) or an amended forecast (TAF
+AMD).
+2. ICAO station identifier—the station identifier is the same as that used in a METAR.
+3. Date and time of origin—time and date (081125Z) of TAF origination is given in the sixnumber code with the first two being the date, the last four being the time. Time is always
+given in UTC as denoted by the Z following the time block.
+4. Valid period dates and times—The TAF valid period (0812/0912) follows the date/time of
+forecast origin group. Scheduled 24 and 30 hour TAFs are issued four times per day, at 0000,
+0600, 1200, and 1800Z. The first two digits (08) are the day of the month for the start of the
+TAF. The next two digits (12) are the starting hour (UTC). 09 is the day of the month for the
+end of the TAF, and the last two digits (12) are the ending hour (UTC) of the valid period. A
+forecast period that begins at midnight UTC is annotated as 00. If the end time of a valid 
+Chapter 3a: Aviation Weather Sources
+Remote Pilot – Small Unmanned Aircraft Systems Study Guide 19
+period is at midnight UTC, it is annotated as 24. For example, a 00Z TAF issued on the 9th of
+the month and valid for 24 hours would have a valid period of 0900/0924.
+5. Forecast wind—the wind direction and speed forecast are coded in a five-digit number group.
+An example would be 15011KT. The first three digits indicate the direction of the wind in
+reference to true north. The last two digits state the wind speed in knots appended with
+“KT.” Like the METAR, winds greater than 99 knots are given in three digits.
+6. Forecast visibility—given in statute miles and may be in whole numbers or fractions. If the
+forecast is greater than six miles, it is coded as “P6SM.”
+7. Forecast significant weather—weather phenomena are coded in the TAF reports in the same
+format as the METAR.
+8. Forecast sky condition—given in the same format as the METAR. Only CB clouds are forecast
+in this portion of the TAF report as opposed to CBs and towering cumulus in the METAR.
+9. Forecast change group—for any significant weather change forecast to occur during the TAF
+time period, the expected conditions and time period are included in this group. This
+information may be shown as from (FM), and temporary (TEMPO). “FM” is used when a rapid
+and significant change, usually within an hour, is expected. “TEMPO” is used for temporary
+fluctuations of weather, expected to last less than 1 hour.
+10. PROB30—a given percentage that describes the probability of thunderstorms and
+precipitation occurring in the coming hours. This forecast is not used for the first 6 hours of
+the 24-hour forecast.
+Example: TAF KPIR 111130Z 1112/1212 TEMPO 1112/1114 5SM BR FM1500 16015G25KT P6SM
+SCT040 BKN250 FM120000 14012KT P6SM BKN080 OVC150 PROB30 1200/1204 3SM
+TSRA BKN030CB FM120400 1408KT P6SM SCT040 OVC080 TEMPO 1204/1208 3SM
+TSRA OVC030CB
+Explanation: Routine TAF for Pierre, South Dakota…on the 11th day of the month, at 1130Z…valid
+for 24 hours from 1200Z on the 11th to 1200Z on the 12th…wind from 150° at 12
+knots… visibility greater than 6 SM…broken clouds at 9,000 feet… temporarily,
+between 1200Z and 1400Z, visibility 5 SM in mist…from 1500Z winds from 160° at 15
+knots, gusting to 25 knots visibility greater than 6 SM…clouds scattered at 4,000 feet
+and broken at 25,000 feet…from 0000Z wind from 140° at 12 knots…visibility greater
+than 6 SM…clouds broken at 8,000 feet, overcast at 15,000 feet…between 0000Z and
+0400Z, there is 30 percent probability of visibility 3 SM…thunderstorm with moderate
+rain showers…clouds broken at 3,000 feet with cumulonimbus clouds…from
+0400Z…winds from 140° at 8 knots…visibility greater than 6 miles…clouds at 4,000
+scattered and overcast at 8,000… temporarily between 0400Z and 0800Z…visibility 3
+miles… thunderstorms with moderate rain showers…clouds overcast at 3,000 feet
+with cumulonimbus clouds…end of report (=).
+Convective Significant Meteorological Information (WST)
+Convective SIGMETs are issued for severe thunderstorms with surface winds greater than 50 knots, hail
+at the surface greater than or equal to ¾ inch in diameter, or tornadoes. They are also issued to advise
+pilots of embedded thunderstorms, lines of thunderstorms, or thunderstorms with heavy or greater
+precipitation that affect 40 percent or more of a 3,000 square mile or greater region. A remote pilot
+will find these weather alerts helpful for flight planning.
