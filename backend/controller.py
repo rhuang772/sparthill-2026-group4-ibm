@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from datetime import datetime, timedelta, timezone
 
-from models import Weather, WeatherForecast, HeightLimit, TfrResult
+from models import Weather, WeatherForecast, HeightLimit, TfrResult, WaterResult
+from service.water_service import WaterService, WaterUnavailable
 from service.weather_service import WeatherService, WeatherUnavailable
 from service.faa_service import FaaService, FaaUnavailable
 from service.tfr_service import TfrService
@@ -117,3 +118,38 @@ async def get_tfr_raw(service: TfrService = Depends(get_tfr_service)):
     except Exception as e:
         raise HTTPException(status_code=502, detail=f"TFR feed error: {e}")
     return {"count": len(data), "sample": data[:3]}
+
+
+#--------------- Water API ----------------
+
+water_router = APIRouter(prefix="/api/water", tags=["water"])
+
+def get_water_service(request: Request) -> WaterService:
+    return WaterService(request.app.state.http_client)
+
+@water_router.get("", response_model=WaterResult)
+async def get_water(
+    lat: float = Query(..., ge=-90, le=90),
+    lon: float = Query(..., ge=-180, le=180),
+    radius_m: float = Query(500, ge=0, le=5000),
+    include_flowlines: bool = Query(True, description="Include rivers, creeks and channels. Set false for lakes and ponds only"),
+    service: WaterService = Depends(get_water_service),
+):
+    try:
+        return await service.get_water(lat, lon, radius_m, include_flowlines)
+    except WaterUnavailable as e:
+        raise HTTPException(status_code=502, detail=f"Water data service unavailable: {e}")
+@water_router.get("/raw")
+async def get_water_raw(
+    lat: float = Query(..., ge=-90, le=90),
+    lon: float = Query(..., ge=-180, le=180),
+    radius_m: float = Query(500, ge=0, le=5000),
+    service: WaterService = Depends(get_water_service),
+):
+    """Debug: the start of the raw Overpass response."""
+    try:
+        data = await service.fetch_raw(lat, lon, radius_m)
+    except WaterUnavailable as e:
+        raise HTTPException(status_code=502, detail=str(e))
+    return {"remark": data.get("remark"), "count": len(data.get("elements", [])),
+            "sample": data.get("elements", [])[:3]}
