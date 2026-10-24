@@ -1,0 +1,16 @@
+{
+  "checked_at": "2025-01-15T12:00:00Z",
+  "tfrs": [
+    {
+      "id": "TFR-FIXTURE-001",
+      "name": "Simulated Active TFR (fixture)",
+      "description": "This is a fixture TFR standing in for a live FAA TFR fetch. In a real deployment, TFRs are fetched from the FAA TFR service. LAANC authorization does not override an active TFR (14 CFR 91.137 et seq.).",
+      "effective_start": "2025-01-15T00:00:00Z",
+      "effective_end": "2025-12-31T23:59:59Z",
+      "center_lat": 38.8951,
+      "center_lon": -77.0364,
+      "radius_nm": 3.0,
+      "source": "fixture-tfr"
+    }
+  ]
+}

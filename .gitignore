@@ -1,3 +1,7 @@
+.chroma/
+data/uasfm/*.geojson
+data/uasfm/meta.json
+.env
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.pyc

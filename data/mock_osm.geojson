@@ -1,0 +1,107 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-122.4194, 37.7749] },
+      "properties": {
+        "name": "Dolores Park",
+        "amenity": "park",
+        "access": "public",
+        "note": "mock"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-122.3959, 37.7935] },
+      "properties": {
+        "name": "Treasure Island (San Francisco Bay)",
+        "leisure": "park",
+        "access": "public",
+        "note": "mock"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-121.8863, 37.3382] },
+      "properties": {
+        "name": "Alviso Marina County Park",
+        "leisure": "park",
+        "operator": "Santa Clara County Parks",
+        "access": "public",
+        "note": "mock"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-121.9773, 37.3541] },
+      "properties": {
+        "name": "Vasona Lake County Park",
+        "leisure": "park",
+        "operator": "Santa Clara County Parks",
+        "access": "public",
+        "note": "mock"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-118.2437, 34.0522] },
+      "properties": {
+        "name": "Echo Park",
+        "leisure": "park",
+        "access": "public",
+        "note": "mock"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-104.9903, 39.7392] },
+      "properties": {
+        "name": "City Park Denver",
+        "leisure": "park",
+        "access": "public",
+        "note": "mock"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-87.6298, 41.8781] },
+      "properties": {
+        "name": "Grant Park Chicago",
+        "leisure": "park",
+        "access": "public",
+        "note": "mock"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-122.3321, 47.6062] },
+      "properties": {
+        "name": "Gasworks Park Seattle",
+        "leisure": "park",
+        "access": "public",
+        "note": "mock"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-84.3879, 33.7490] },
+      "properties": {
+        "name": "Piedmont Park Atlanta",
+        "leisure": "park",
+        "access": "public",
+        "note": "mock"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-73.9857, 40.7580] },
+      "properties": {
+        "name": "Bryant Park New York",
+        "leisure": "park",
+        "access": "public",
+        "note": "mock"
+      }
+    }
+  ]
+}
