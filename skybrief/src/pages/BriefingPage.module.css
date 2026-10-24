@@ -159,6 +159,98 @@
   line-height: 1.65;
 }
 
+.assessment {
+  padding: 1rem 1.125rem;
+  margin-bottom: 1.25rem;
+  border: 1px solid var(--color-border);
+  border-left-width: 5px;
+  border-radius: var(--radius-md);
+}
+
+.assessmentGo {
+  background: #ecfdf3;
+  border-left-color: #15803d;
+}
+
+.assessmentCaution {
+  background: #fffbeb;
+  border-left-color: #b45309;
+}
+
+.assessmentNoGo {
+  background: #fef2f2;
+  border-left-color: #b91c1c;
+}
+
+.assessmentTitle {
+  font-size: 1rem;
+  font-weight: 750;
+  margin: 0 0 0.35rem;
+  color: var(--color-text-primary);
+}
+
+.assessment p {
+  margin: 0.25rem 0;
+}
+
+.assessmentDisclaimer {
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.facts {
+  margin: 0;
+  padding: 1.125rem 1.25rem;
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.briefingSections {
+  display: grid;
+  gap: 1rem;
+}
+
+.factsTitle {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+  font-weight: 750;
+  color: var(--color-brand);
+}
+
+.factsList {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.fact dt {
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.fact dd {
+  margin: 0.2rem 0 0;
+  color: var(--color-text-primary);
+}
+
+.fact .factSource {
+  color: var(--color-text-secondary);
+  font-size: 0.75rem;
+}
+
+.sectionSummary {
+  margin: 0.875rem 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.sectionSummary strong {
+  color: var(--color-text-primary);
+}
+
 .mockNotice {
   font-size: 0.8125rem;
   color: var(--color-text-secondary);

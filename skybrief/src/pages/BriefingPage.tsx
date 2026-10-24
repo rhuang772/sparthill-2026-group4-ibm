@@ -10,6 +10,22 @@ import { downloadDemoBriefingPdf } from '../services/briefingPdf';
 import styles from './BriefingPage.module.css';
 
 const API_BASE = import.meta.env.VITE_API_BASE ?? 'http://localhost:8000';
+const ASSESSMENT_LABELS = {
+  go: 'Go — no blockers identified in checked sources',
+  caution: 'Caution — review the findings before deciding',
+  no_go: 'No-go — a source-based blocker was identified',
+} as const;
+const ASSESSMENT_STYLES = {
+  go: styles.assessmentGo,
+  caution: styles.assessmentCaution,
+  no_go: styles.assessmentNoGo,
+} as const;
+const BRIEFING_SECTIONS = [
+  { key: 'airspace', title: 'Airspace & authorization' },
+  { key: 'conditions', title: 'Flight conditions' },
+  { key: 'restrictions', title: 'Restrictions' },
+  { key: 'nearby_risks', title: 'Nearby risks' },
+] as const;
 
 /** Convert the locally entered flight date/time to the UTC ISO format used by the APIs. */
 function toFlightTime(date: string, time: string): string | null {
@@ -113,8 +129,56 @@ export default function BriefingPage() {
 
             {response && !loading && (
               <div className={styles.markdownOutput}>
-                {/* Render the markdown as preformatted text — no external parser needed */}
-                <MarkdownText text={response.answer_markdown} />
+                {response.flight_assessment && (
+                  <aside
+                    className={`${styles.assessment} ${ASSESSMENT_STYLES[response.flight_assessment]}`}
+                    role="status"
+                    aria-label="Advisory flight assessment"
+                  >
+                    <h2 className={styles.assessmentTitle}>
+                      {ASSESSMENT_LABELS[response.flight_assessment]}
+                    </h2>
+                    {response.assessment_summary && <p>{response.assessment_summary}</p>}
+                    <p className={styles.assessmentDisclaimer}>
+                      Advisory only—not FAA authorization or a guarantee of safety. Verify in B4UFLY and check current NOTAMs.
+                    </p>
+                  </aside>
+                )}
+                {response.section_summaries ? (
+                  <div className={styles.briefingSections}>
+                    {BRIEFING_SECTIONS.map((section) => {
+                      const facts = response.flight_facts?.filter(
+                        (fact) => fact.section === section.key,
+                      ) ?? [];
+                      const summary = response.section_summaries?.[section.key];
+                      return (
+                        <section className={styles.facts} key={section.key}>
+                          <h2 className={styles.factsTitle}>{section.title}</h2>
+                          {facts.length > 0 && (
+                            <dl className={styles.factsList}>
+                              {facts.map((fact) => (
+                                <div className={styles.fact} key={fact.label}>
+                                  <dt>{fact.label}</dt>
+                                  <dd>{fact.value}</dd>
+                                  <dd className={styles.factSource}>
+                                    {fact.source}{fact.checked_at ? ` · Checked ${fact.checked_at}` : ''}
+                                  </dd>
+                                </div>
+                              ))}
+                            </dl>
+                          )}
+                          {summary && (
+                            <p className={styles.sectionSummary}>
+                              <strong>Summary:</strong> {summary}
+                            </p>
+                          )}
+                        </section>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <MarkdownText text={response.answer_markdown} />
+                )}
 
                 {/* mock data notice */}
                 {response.mock_data && (

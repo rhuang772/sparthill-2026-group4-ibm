@@ -116,8 +116,27 @@ export interface ApiCitation {
   dummy: boolean;
 }
 
+export interface BriefingFact {
+  section: 'airspace' | 'conditions' | 'restrictions' | 'nearby_risks';
+  label: string;
+  value: string;
+  source: string;
+  checked_at?: string | null;
+}
+
+export interface BriefingSectionSummaries {
+  airspace: string;
+  conditions: string;
+  restrictions: string;
+  nearby_risks: string;
+}
+
 export interface CheckResponse {
   answer_markdown: string;
+  flight_assessment?: 'go' | 'caution' | 'no_go' | null;
+  assessment_summary?: string | null;
+  flight_facts?: BriefingFact[];
+  section_summaries?: BriefingSectionSummaries | null;
   citations: ApiCitation[];
   tools_called: ApiToolCall[];
   sources_failed: string[];

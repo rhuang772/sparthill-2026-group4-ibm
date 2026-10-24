@@ -24,7 +24,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app import composer
 from app.providers import faa_class_airspace, faa_facility_map, weather as weather_provider
 from app.rules.chroma_dummy import get_store
-from app.schema import CheckResponse, RulesResponse
+from app.schema import BriefingSectionSummaries, CheckResponse, RulesResponse
 from backend.controller import (
     faa_router, park_router, population_router, router as backend_weather_router,
     tfr_router, water_router,
@@ -37,6 +37,275 @@ from backend.service.water_service import WaterService
 from backend.service.weather_service import WeatherService
 
 log = logging.getLogger(__name__)
+
+_WIND_DIRECTIONS = ("N", "NE", "E", "SE", "S", "SW", "W", "NW")
+
+
+def _display_number(value: object, suffix: str) -> str | None:
+    if not isinstance(value, (int, float)) or isinstance(value, bool):
+        return None
+    return f"{value:g}{suffix}"
+
+
+def _wind_direction(degrees: object) -> str | None:
+    if not isinstance(degrees, (int, float)) or isinstance(degrees, bool):
+        return None
+    direction = _WIND_DIRECTIONS[round(degrees / 45) % len(_WIND_DIRECTIONS)]
+    return f"from {direction} ({degrees:g}°)"
+
+
+def _briefing_facts(results: dict, planned_altitude_ft: Optional[int]) -> list[dict[str, str]]:
+    """Build factual display lines directly from provider results, without AI rewriting."""
+    facts: list[dict[str, str]] = []
+
+    def add(
+        section: str,
+        label: str,
+        value: str,
+        source: str,
+        checked_at: object = None,
+    ) -> None:
+        fact = {"section": section, "label": label, "value": value, "source": source}
+        if isinstance(checked_at, str) and checked_at:
+            fact["checked_at"] = checked_at
+        facts.append(fact)
+
+    def source_data(name: str, section: str, label: str, source: str) -> dict:
+        data = results.get(name, {})
+        if data.get("status") == "failed":
+            add(section, label, "Could not verify: source unavailable.", source)
+            return {}
+        return data
+
+    current = source_data("weather_current", "conditions", "Current weather", "Open-Meteo")
+    if current:
+        conditions = []
+        temp = _display_number(current.get("temperature_f"), " °F")
+        wind = _display_number(current.get("wind_mph"), " mph")
+        gusts = _display_number(current.get("gusts_mph"), " mph")
+        direction = _wind_direction(current.get("wind_direction_deg"))
+        description = current.get("weather_description")
+        if temp:
+            conditions.append(f"Temperature {temp}")
+        if wind:
+            conditions.append(f"wind {wind}{f' {direction}' if direction else ''}")
+        if gusts:
+            conditions.append(f"gusts {gusts}")
+        if description:
+            conditions.append(str(description))
+        add(
+            "conditions",
+            "Current conditions",
+            "; ".join(conditions) if conditions else "No current weather values returned.",
+            "Open-Meteo",
+            current.get("observed_at"),
+        )
+
+    forecast = source_data("weather_forecast", "conditions", "Planned flight weather", "Open-Meteo forecast")
+    if forecast:
+        summary = forecast.get("summary") or {}
+        conditions = []
+        minimum = _display_number(summary.get("min_temperature_f"), " °F")
+        maximum = _display_number(summary.get("max_temperature_f"), " °F")
+        if minimum and maximum:
+            conditions.append(f"temperature {minimum} to {maximum}")
+        for key, label, suffix in (
+            ("max_wind_mph", "max wind at 10 m", " mph"),
+            ("max_wind_mph_120m", "max wind at 120 m", " mph"),
+            ("max_gusts_mph", "max gusts", " mph"),
+            ("max_precipitation_probability_pct", "max precipitation probability", "%"),
+            ("total_precipitation_in", "total precipitation", " in"),
+        ):
+            value = _display_number(summary.get(key), suffix)
+            if value:
+                conditions.append(f"{label} {value}")
+        visibility = summary.get("min_visibility_m")
+        if isinstance(visibility, (int, float)) and not isinstance(visibility, bool):
+            conditions.append(f"minimum visibility {visibility:g} m")
+        if summary.get("worst_weather_description"):
+            conditions.append(f"forecast condition {summary['worst_weather_description']}")
+        add(
+            "conditions",
+            "Planned flight weather (1-hour window)",
+            "; ".join(conditions) if conditions else "No forecast values returned.",
+            "Open-Meteo",
+            forecast.get("fetched_at"),
+        )
+        for hour in forecast.get("hours") or []:
+            hour_conditions = []
+            for key, label, suffix in (
+                ("temperature_f", "temperature", " °F"),
+                ("wind_mph", "wind", " mph"),
+                ("gusts_mph", "gusts", " mph"),
+                ("visibility_m", "visibility", " m"),
+                ("precipitation_probability_pct", "precipitation probability", "%"),
+                ("precipitation_in", "precipitation", " in"),
+            ):
+                value = _display_number(hour.get(key), suffix)
+                if value:
+                    hour_conditions.append(f"{label} {value}")
+            direction = _wind_direction(hour.get("wind_direction_deg"))
+            if direction:
+                for index, condition in enumerate(hour_conditions):
+                    if condition.startswith("wind "):
+                        hour_conditions[index] = f"{condition} {direction}"
+                        break
+            if hour.get("weather_description"):
+                hour_conditions.append(f"condition {hour['weather_description']}")
+            hour_time = hour.get("time") or "planned hour"
+            add(
+                "conditions",
+                f"Forecast at {hour_time}",
+                "; ".join(hour_conditions) if hour_conditions else "No hourly values returned.",
+                "Open-Meteo",
+                forecast.get("fetched_at"),
+            )
+
+    ceiling = source_data(
+        "faa_height_limit", "airspace", "FAA facility-map ceiling", "FAA UAS Facility Map"
+    )
+    if ceiling:
+        classes = ceiling.get("airspace_classes")
+        radius_m = ceiling.get("radius_m")
+        radius_description = (
+            f"{radius_m:g} m"
+            if isinstance(radius_m, (int, float)) and not isinstance(radius_m, bool)
+            else "the queried radius"
+        )
+        if isinstance(classes, list) and classes:
+            class_names = ", ".join(f"Class {class_name}" for class_name in classes)
+            class_value = f"{class_names} reported in facility-map cells within {radius_description}."
+        elif isinstance(classes, list):
+            class_value = (
+                f"Assumed Class G because no airspace classes were reported in "
+                f"facility-map cells within {radius_description}. This is an "
+                "unverified fallback."
+            )
+        else:
+            class_value = (
+                f"Airspace class could not be confirmed from facility-map cells "
+                f"within {radius_description}."
+            )
+        class_value += (
+            " This radius-based result does not confirm the exact airspace class "
+            "at the pin. Verify the exact class in B4UFLY."
+        )
+        add("airspace", "Airspace classes reported", class_value, "FAA UAS Facility Map")
+
+        max_altitude = ceiling.get("max_altitude_ft")
+        if ceiling.get("status") == "limited" and isinstance(max_altitude, (int, float)):
+            value = f"{max_altitude:g} ft AGL"
+            if ceiling.get("limiting_airport"):
+                value += f"; limiting airport: {ceiling['limiting_airport']}"
+            value += "; ceiling is a map limit, not an authorization grant."
+        else:
+            value = "No cell/ceiling confirmed for this location."
+        if ceiling.get("status") == "unknown":
+            value += " Authorization ceiling is unknown."
+        if ceiling.get("map_effective"):
+            value += f" Map effective: {ceiling['map_effective']}."
+        if planned_altitude_ft is not None:
+            value += f" Planned altitude: {planned_altitude_ft} ft AGL."
+        add("airspace", "FAA facility-map ceiling", value, "FAA UAS Facility Map")
+
+    tfr = source_data("tfr", "restrictions", "Temporary flight restrictions", "FAA TFR feed")
+    if tfr:
+        tfr_status = tfr.get("status")
+        if tfr_status == "restricted":
+            active = [
+                f"{item.get('notam_id', 'TFR')} ({item.get('time_status', 'unknown')})"
+                for item in tfr.get("tfrs", [])
+                if item.get("time_status") in ("active", "unknown")
+                and item.get("reaches_drone_altitudes")
+            ]
+            value = "Relevant restriction reported"
+            if active:
+                value += ": " + ", ".join(active)
+        elif tfr_status == "clear":
+            value = "No relevant TFR identified in this query."
+        else:
+            value = "Could not confirm TFR status."
+        add("restrictions", "Temporary flight restrictions", value, "FAA TFR feed", tfr.get("data_fetched_at"))
+
+    water = source_data("water", "nearby_risks", "Water nearby", "USGS 3DHP")
+    if water:
+        distance = _display_number(water.get("nearest_distance_m"), " m")
+        water_bodies = water.get("water_bodies") or []
+        water_features = []
+        for feature in water_bodies:
+            if not isinstance(feature, dict):
+                continue
+            name = feature.get("name") or "Unnamed water feature"
+            kind = feature.get("kind")
+            layer = feature.get("layer")
+            feature_type = str(kind or layer or "water feature").replace("_", " ")
+            feature_distance = _display_number(feature.get("distance_m"), " m")
+            detail = f"{name} ({feature_type}"
+            if feature_distance:
+                detail += f", {feature_distance}"
+            water_features.append(detail + ")")
+
+        if water.get("point_over_water"):
+            value = "The coordinate is over mapped water."
+        elif water.get("water_found") and distance:
+            value = f"Nearest mapped water is {distance} away."
+        else:
+            value = "No water feature found in the queried radius."
+        if water_features:
+            value += f" Mapped water features: {', '.join(water_features)}."
+        if water.get("truncated"):
+            value += (
+                f" Showing {len(water_features)} of "
+                f"{water.get('total_found', 'the returned')} mapped features."
+            )
+        value += f" Reported risk: {water.get('risk', 'unknown')}."
+        add("nearby_risks", "Water nearby", value, "USGS 3DHP", water.get("fetched_at"))
+
+    population = source_data(
+        "population_risk", "nearby_risks", "Population context", "Geoapify / population context"
+    )
+    if population:
+        features = population.get("features") or []
+        feature_details = []
+        for feature in features:
+            if not isinstance(feature, dict):
+                continue
+            name = feature.get("name")
+            kind = feature.get("kind")
+            if name and kind:
+                feature_details.append(f"{name} ({str(kind).replace('_', ' ')})")
+            elif name:
+                feature_details.append(str(name))
+            elif kind:
+                feature_details.append(str(kind).replace("_", " "))
+        feature_list = (
+            f" Mapped places: {', '.join(feature_details)}."
+            if feature_details
+            else ""
+        )
+        add(
+            "nearby_risks",
+            "Population context",
+            f"{population.get('status', 'unknown').capitalize()} heuristic; "
+            f"{population.get('features_found', 0)} mapped features in the query radius."
+            f"{feature_list} This is not a population count.",
+            "Geoapify / population context",
+            population.get("fetched_at"),
+        )
+
+    parks = source_data("park_risk", "nearby_risks", "Protected areas", "USGS PAD-US")
+    if parks:
+        features = parks.get("features") or []
+        names = [str(feature.get("name")) for feature in features if feature.get("name")]
+        value = (
+            f"{len(names)} mapped protected area(s): {', '.join(names)}."
+            if names
+            else "No protected area found in this query."
+        )
+        value += " Check the land manager for site-specific rules."
+        add("nearby_risks", "Protected areas", value, "USGS PAD-US", parks.get("fetched_at"))
+
+    return facts
 
 
 # ---------------------------------------------------------------------------
@@ -264,7 +533,7 @@ async def backend_briefing(
     }
 
     try:
-        answer = await composer.compose_backend_briefing(
+        assessment = await composer.compose_backend_briefing(
             {
                 "lat": lat,
                 "lon": lon,
@@ -283,13 +552,24 @@ async def backend_briefing(
         ) from exc
 
     return CheckResponse(
-        answer_markdown=answer,
+        answer_markdown=(
+            "## Where you are / airspace\n" + assessment.section_summaries.airspace
+            + "\n\n## Conditions for the planned flight\n" + assessment.section_summaries.conditions
+            + "\n\n## Restrictions\n" + assessment.section_summaries.restrictions
+            + "\n\n## Nearby risks\n" + assessment.section_summaries.nearby_risks
+            + "\n\n---\n**Before flying:** Verify current conditions in B4UFLY, check NOTAMs, "
+            "and follow land-manager and local rules. This educational briefing is not FAA authorization."
+        ),
         citations=[],
         tools_called=tools_called,
         sources_failed=sources_failed,
         data_freshness=data_freshness,
         nearby_alternatives=[],
         mock_data=False,
+        flight_assessment=assessment.status,
+        assessment_summary=assessment.summary,
+        flight_facts=_briefing_facts(results, planned_altitude_ft),
+        section_summaries=assessment.section_summaries,
     )
 
 # ---------------------------------------------------------------------------
