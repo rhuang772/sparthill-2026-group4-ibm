@@ -4,6 +4,7 @@ import FlightPlanPage from './pages/FlightPlanPage';
 import BriefingPage from './pages/BriefingPage';
 import LessonPage from './pages/LessonPage';
 import ChatPage from './pages/ChatPage';
+import SavedBriefingsPage from './pages/SavedBriefingsPage';
 
 export default function App() {
   return (
@@ -13,6 +14,7 @@ export default function App() {
       <Route path="/briefing" element={<BriefingPage />} />
       <Route path="/lesson" element={<LessonPage />} />
       <Route path="/chat" element={<ChatPage />} />
+      <Route path="/saved" element={<SavedBriefingsPage />} />
     </Routes>
   );
 }
